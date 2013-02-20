@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <Color x:Key="NormalBrandColor">#52318F</Color>
-    <Color x:Key="HoverBrandColor">#322350</Color>
+    <Color x:Key="NormalBrandColor">#551a8b</Color>
+    <Color x:Key="HoverBrandColor">#442359</Color>
     <Color x:Key="SecondaryBrandColor">#00BCF2</Color>
 
     <Color x:Key="LightNeutralColor">#D2D2D2</Color>
@@ -71,12 +71,15 @@
     <Style TargetType="{x:Type Button}" x:Key="KinectButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="MinHeight" Value="23" />
-        <Setter Property="MinWidth" Value="75" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="20,8,20,6" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Name="Root" BorderBrush="{StaticResource LabelForegroundBrush}" BorderThickness="2">
+                    <Border Name="Root" BorderBrush="{StaticResource LabelForegroundBrush}" BorderThickness="0">
                         <Border.Background>
                             <SolidColorBrush x:Name="RootBackground" Color="{StaticResource NormalBrandColor}"/>
                         </Border.Background>
@@ -98,7 +101,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <ContentPresenter Margin="2"
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             RecognizesAccessKey="True"
@@ -295,4 +298,73 @@
             </Setter>
         </Style.Setters>
     </Style>
+
+    <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+        <Setter Property="Background" Value="{StaticResource NormalBrandBrush}"/>
+        <Setter Property="Height" Value="4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Slider}">
+                    <ControlTemplate.Resources>
+                        <Style TargetType="{x:Type RepeatButton}">
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter Property="Focusable" Value="false"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                        <Border Background="{TemplateBinding Background}"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <PathGeometry x:Key="Bar">
+                            <PathFigure StartPoint="0,0">
+                                <LineSegment Point="0,1"/>
+                                <LineSegment Point="1,1"/>
+                                <LineSegment Point="1,0"/>
+                                <LineSegment Point="0,0"/>
+                            </PathFigure>
+                        </PathGeometry>
+                        
+                    </ControlTemplate.Resources>
+                    <Grid>
+                        <Path
+                        Data="{StaticResource Bar}"
+                        Stretch="Fill"
+                            Fill="{StaticResource MediumNeutralBrush}"
+                        Stroke="Transparent"
+                        StrokeThickness="0"/>
+                        <Grid>
+                            <Grid.OpacityMask>
+                                <DrawingBrush>
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing Brush="{StaticResource MediumNeutralBrush}" Geometry="{StaticResource Bar}"/>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Grid.OpacityMask>
+                            <Track Name="PART_Track" Value="{TemplateBinding Value}">
+                                <Track.Thumb>
+                                    <Thumb Width="0" Background="{StaticResource SecondaryBrandBrush}">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                <Border Background="{TemplateBinding Background}"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Background="{TemplateBinding Background}" Command="Slider.DecreaseLarge"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Background="Transparent" Command="Slider.IncreaseLarge"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

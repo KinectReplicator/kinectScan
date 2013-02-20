@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:kinectScan"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="kinectScan" Height="600" Width="900" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0">
+        Title="kinectScan" Height="630" Width="908" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0">
 
     <Window.Resources>
 
         <ResourceDictionary Source="/KinectResources.xaml" />
-           
+        
     </Window.Resources>
     
     
@@ -26,11 +26,22 @@
         </Grid.ColumnDefinitions>
         
         <Grid Name="DepthCam" Grid.Column="0" Grid.Row="0">
-            <Rectangle Fill="{StaticResource SecondaryBrandBrush}" Width="380" Height="600" Grid.ColumnSpan="1" Margin="0,0,512,0" />
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,30,542,330" />
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,300,542,60" />
-        </Grid>
+            <Rectangle Fill="{StaticResource SecondaryBrandBrush}" Width="380" Height="600" Grid.ColumnSpan="1" Margin="0,0,520,0" />
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,30,550,330" />
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,330,550,30" VerticalAlignment="Top" />
 
+            <Label Content="IR DEPTH CAMERA" Foreground="White" HorizontalAlignment="Left" Margin="40,280,0,0" VerticalAlignment="Top"/>
+            <Label Content="3D MODEL" Foreground="White" HorizontalAlignment="Right" Margin="0,0,560,280" VerticalAlignment="Bottom"/>
+
+            <Button Name ="Begin_Scan" Content="BEGIN SCAN" Margin="410,30,0,0" Style="{StaticResource KinectButton}" />
+            <Button Name ="End_Scan" Content="END SCAN" Margin="564,30,0,0" Style="{StaticResource KinectButton}" />
+            <Button Name ="Export_Model" Content="EXPORT MODEL" VerticalAlignment="Bottom" Margin="410,0,0,30" Style="{StaticResource KinectButton}" Padding="20,8,50,6"/>
+            <Image Source="Images/download-icon.png" Width="23" Height="23" HorizontalAlignment="Right" Margin="0,0,350,34" VerticalAlignment="Bottom"/>
+
+            <Label Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="410,85,0,0" VerticalAlignment="Top"/>
+            <Slider HorizontalAlignment="Left"  Margin="410,105,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+
+        </Grid>
         
     </Grid>
 </Window>
