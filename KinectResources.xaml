@@ -69,6 +69,8 @@
     </Style>
 
     <Style TargetType="{x:Type Button}" x:Key="KinectButton">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -116,12 +118,17 @@
 
     <Style TargetType="{x:Type RadioButton}" x:Key="KinectSettingsPanel">
         <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="FontFamily" Value="{StaticResource KinectFont}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="20,8,20,6"/>
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border Name="Root">
                         <Border.Background>
-                            <SolidColorBrush x:Name="RootBackground" Color="{StaticResource DarkNeutralColor}"/>
+                            <SolidColorBrush x:Name="RootBackground" Color="{StaticResource MediumNeutralColor}"/>
                         </Border.Background>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -148,7 +155,7 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="RootBackground"
                                                     Storyboard.TargetProperty="(SolidColorBrush.Color)"
-                                                    To="{StaticResource DarkNeutralColor}"
+                                                    To="{StaticResource MediumNeutralColor}"
                                                     Duration="0:0:0.2"/>
                                         <DoubleAnimation
                                                         FillBehavior="HoldEnd"
@@ -318,6 +325,7 @@
                                 </Setter.Value>
                             </Setter>
                         </Style>
+                        <!--SLIDER BAR PATH-->
                         <PathGeometry x:Key="Bar">
                             <PathFigure StartPoint="0,0">
                                 <LineSegment Point="0,1"/>
@@ -326,13 +334,23 @@
                                 <LineSegment Point="0,0"/>
                             </PathFigure>
                         </PathGeometry>
+                        <!--BAR END-->
+                        <!--TRIANGLE THUMB PATH-->
+                        <PathGeometry x:Key="Triangle">
+                            <PathFigure StartPoint="-1,1">
+                                <LineSegment Point="0,0"/>
+                                <LineSegment Point="1,1"/>
+                                <LineSegment Point="-1,1"/>
+                            </PathFigure>
+                        </PathGeometry>
+                        <!--TRIANGLE END-->
                         
                     </ControlTemplate.Resources>
                     <Grid>
                         <Path
                         Data="{StaticResource Bar}"
                         Stretch="Fill"
-                            Fill="{StaticResource MediumNeutralBrush}"
+                        Fill="{StaticResource MediumNeutralBrush}"
                         Stroke="Transparent"
                         StrokeThickness="0"/>
                         <Grid>
@@ -345,19 +363,24 @@
                             </Grid.OpacityMask>
                             <Track Name="PART_Track" Value="{TemplateBinding Value}">
                                 <Track.Thumb>
-                                    <Thumb Width="0" Background="{StaticResource SecondaryBrandBrush}">
+                                    <Thumb Width="0" Background="{StaticResource SecondaryBrandBrush}" Foreground="{x:Null}">
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="{x:Type Thumb}">
-                                                <Border Background="{TemplateBinding Background}"/>
+                                                <Path
+                                                    Data="{StaticResource Triangle}"
+                                                    Stretch="Fill" Fill="{StaticResource SecondaryBrandBrush}"
+                                                    Stroke="Transparent"
+                                                    StrokeThickness="0"
+                                                    Margin="-4,4,-4,-4"/>
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>
                                 </Track.Thumb>
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Background="{TemplateBinding Background}" Command="Slider.DecreaseLarge"/>
+                                    <RepeatButton Background="{TemplateBinding Background}" Command="Slider.DecreaseLarge" IsEnabled="True" IsHitTestVisible="False"/>
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Background="Transparent" Command="Slider.IncreaseLarge"/>
+                                    <RepeatButton Background="Transparent" Command="Slider.IncreaseLarge" IsEnabled="True" IsHitTestVisible="False"/>
                                 </Track.IncreaseRepeatButton>
                             </Track>
                         </Grid>
