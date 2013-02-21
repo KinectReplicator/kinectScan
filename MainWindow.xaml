@@ -12,50 +12,60 @@
 
     </Window.Resources>
 
+    <Grid x:Name="LayoutGrid"  Margin="0, 0, 0, 0">
 
-    <Grid x:Name="layoutGrid" Margin="0 0 0 0" TextBlock.FontFamily="{StaticResource KinectFont}">
+        <Rectangle Fill="{StaticResource SecondaryBrandBrush}" />
+        
+        <Grid x:Name="CameraZone" Margin="0, 0, 0, 0"  TextBlock.FontFamily="{StaticResource KinectFont}">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="270" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="270" />
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <!-- Model and Camera area -->
-            <ColumnDefinition Width="*" MinWidth="380" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="380" />
+            </Grid.ColumnDefinitions>
 
-        <Grid x:Name="DepthCam" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-            <Rectangle Fill="{StaticResource SecondaryBrandBrush}" Width="380" Height="600" Grid.ColumnSpan="1" Margin="0,0,520,0" />
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,30,550,330" />
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Width="320" Height="240" Margin="30,330,550,30" VerticalAlignment="Top" />
+            <!-- Depth Camera -->
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="30,30,30, 0" />
+            
+            <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom"/>
 
-            <Label x:Name="IR_Title" Content="IR DEPTH CAMERA" Foreground="White" HorizontalAlignment="Left" Margin="40,280,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Model_Title" Content="3D MODEL" Foreground="White" HorizontalAlignment="Right" Margin="0,0,560,280" VerticalAlignment="Bottom"/>
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
 
-            <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="410,30,0,0" Style="{StaticResource KinectButton}" />
-            <Button x:Name ="End_Scan" Content="END SCAN" Margin="564,30,0,0" Style="{StaticResource KinectButton}" />
-            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="410,0,0,30" Style="{StaticResource KinectButton}">
+            <!-- Reconstruction Model -->
+
+        </Grid>
+
+        <Grid x:Name="MenuArea" Background="White" Margin="380,0,0,0">
+
+            <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="30,30,0,0" Style="{StaticResource KinectButton}" />
+            <Button x:Name ="End_Scan" Content="END SCAN" Margin="184,30,0,0" Style="{StaticResource KinectButton}" />
+       
+            <Label x:Name="Filter_Title" Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,85,0,0" VerticalAlignment="Top"/>
+            <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="30,105,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+
+            <Label x:Name="Slider2_Title" Content="SLIDER 2" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,120,0,0" VerticalAlignment="Top"/>
+            <Slider x:Name="Filter_Slider2" HorizontalAlignment="Left"  Margin="30,140,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+
+            <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,155,0,0" VerticalAlignment="Top"/>
+            <Slider x:Name="Filter_Slider3" HorizontalAlignment="Left"  Margin="30,175,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+
+            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="Export_Label" Content="EXPORT MODEL" Foreground="White" FontFamily="{StaticResource KinectFont}" FontSize="14" Padding="0,0,10,0"/>
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
             </Button>
 
-            <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="610,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
-            <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="670,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
-
-            <Label x:Name="Filter_Title" Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="410,85,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="410,105,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
-
-            <Label x:Name="Slider2_Title" Content="SLIDER 2" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="410,120,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider2" HorizontalAlignment="Left"  Margin="410,140,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
-
-            <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="410,155,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider3" HorizontalAlignment="Left"  Margin="410,175,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+            <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="230,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
+            <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
 
         </Grid>
-
     </Grid>
+
 </Window>
