@@ -15,8 +15,8 @@
     <Grid x:Name="LayoutGrid"  Margin="0, 0, 0, 0">
 
         <Rectangle Fill="{StaticResource SecondaryBrandBrush}" />
-        
-        <Grid x:Name="CameraZone" Margin="0, 0, 0, 0"  TextBlock.FontFamily="{StaticResource KinectFont}">
+
+        <Grid x:Name="CameraZone" Margin="0,0,0,0" TextBlock.FontFamily="{StaticResource KinectFont}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="270" />
@@ -31,14 +31,14 @@
 
             <!-- Depth Camera -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="30,30,30, 0" />
+            <Image Name="KinectDepthView" Grid.Row="0" Height="240" Width="320" Margin="30,30,30, 0"/>
             
             <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
             <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom"/>
-
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
-
+            
             <!-- Reconstruction Model -->
-
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
+            
         </Grid>
 
         <Grid x:Name="MenuArea" Background="White" Margin="380,0,0,0">
