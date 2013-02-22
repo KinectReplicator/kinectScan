@@ -64,6 +64,7 @@
 
             <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="230,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
             <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
+            <TextBox x:Name="statusBarText" HorizontalAlignment="Left" Height="75" Margin="104,215,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="177"/>
 
         </Grid>
     </Grid>
