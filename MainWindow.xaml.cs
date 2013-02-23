@@ -21,10 +21,6 @@ namespace kinectScan
         private KinectSensor sensor;
 
         /// <summary>
-        /// Drawing image that we will display
-        /// </summary>
-        private DrawingImage imageSource;
-        /// <summary>
         /// Bitmap that will hold color information
         /// </summary>
         private WriteableBitmap colorBitmap;

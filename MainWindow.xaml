@@ -35,7 +35,7 @@
             
             <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
             <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom"/>
-            <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Content="" Grid.RowSpan="2"/>
+            <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
 
             <!-- Reconstruction Model -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
