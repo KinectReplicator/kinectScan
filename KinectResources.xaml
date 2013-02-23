@@ -219,6 +219,7 @@
         </Setter>
     </Style>
 
+    <!--
     <Style TargetType="{x:Type CheckBox}" x:Key="KinectCheckBox">
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Template">
@@ -305,6 +306,7 @@
             </Setter>
         </Style.Setters>
     </Style>
+    -->
 
     <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
         <Setter Property="Background" Value="{StaticResource NormalBrandBrush}"/>

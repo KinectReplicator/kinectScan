@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:kinectScan"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="kinectScan.MainWindow"
-        Title="kinectScan" Height="630" Width="908" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0">
+        Title="kinectScan" Height="630" Width="908" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0" Icon="Images/Kinect.ico">
 
     <Window.Resources>
 
@@ -63,8 +63,10 @@
                 </StackPanel>
             </Button>
 
+            <!--
             <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="230,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
             <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
+            -->
 
         </Grid>
     </Grid>
