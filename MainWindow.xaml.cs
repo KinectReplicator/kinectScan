@@ -93,7 +93,9 @@ namespace kinectScan
 
             if (null == this.sensor)
             {
-                this.statusBarText.Text = Properties.Resources.NoKinectReady;
+                this.statusBarText.Content = Properties.Resources.NoKinectReady;
+                this.IR_Title.Content = "";
+                this.Model_Title.Content = "";
             }
         }
 

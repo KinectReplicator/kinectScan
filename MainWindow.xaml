@@ -35,7 +35,8 @@
             
             <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
             <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom"/>
-            
+            <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Content="" Grid.RowSpan="2"/>
+
             <!-- Reconstruction Model -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
             
@@ -64,7 +65,6 @@
 
             <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="230,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
             <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
-            <TextBox x:Name="statusBarText" HorizontalAlignment="Left" Height="75" Margin="104,215,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="177"/>
 
         </Grid>
     </Grid>
