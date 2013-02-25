@@ -82,16 +82,16 @@
                 </Grid.ColumnDefinitions>
                 
                 <Label x:Name="Filter_Title" Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
-                <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" />
+                <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" Minimum="0.4" Maximum="10"/>
                 <Label x:Name="Filter_Value" Content="{Binding ElementName=Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="Slider2_Title" Content="SLIDER 2" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                <Slider x:Name="Slider2" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" />
+                <Slider x:Name="Slider2" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="0" Maximum="10"/>
                 <Label x:Name="Slider2_Value" Content="{Binding ElementName=Slider2,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
 
                 <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                <Slider x:Name="Slider3" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" />
+                <Slider x:Name="Slider3" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" Minimum="0" Maximum="10"/>
                 <Label x:Name="Slider3_Value" Content="{Binding ElementName=Slider3,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
             </Grid> <!--SliderArea-->
