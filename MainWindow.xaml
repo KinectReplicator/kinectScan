@@ -13,10 +13,20 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutGrid"  Margin="0, 0, 0, 0">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="380" />
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
         <Rectangle Fill="{StaticResource SecondaryBrandBrush}" />
 
-        <Grid x:Name="CameraZone" Margin="0,0,0,0" TextBlock.FontFamily="{StaticResource KinectFont}">
+        <Grid x:Name="CameraZone" Margin="0,0,0,0" TextBlock.FontFamily="{StaticResource KinectFont}" Grid.Column="0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="270" />
@@ -40,23 +50,53 @@
             <!-- Reconstruction Model -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
             
-        </Grid>
+        </Grid> <!--CameraZone-->
 
-        <Grid x:Name="MenuArea" Background="White" Margin="380,0,0,0">
+        <Grid x:Name="MenuArea" Background="White" Grid.Column="2">
 
-            <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="30,30,0,0" Style="{StaticResource KinectButton}" />
-            <Button x:Name ="End_Scan" Content="END SCAN" Margin="184,30,0,0" Style="{StaticResource KinectButton}" />
-       
-            <Label x:Name="Filter_Title" Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,85,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="30,105,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90" />
+                <RowDefinition Height="120" />
+                <RowDefinition />
+                <RowDefinition Height="100" />
+            </Grid.RowDefinitions>
 
-            <Label x:Name="Slider2_Title" Content="SLIDER 2" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,120,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider2" HorizontalAlignment="Left"  Margin="30,140,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="520" />
+            </Grid.ColumnDefinitions>
+            
+            <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0"/>
+            <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" />
 
-            <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="30,155,0,0" VerticalAlignment="Top"/>
-            <Slider x:Name="Filter_Slider3" HorizontalAlignment="Left"  Margin="30,175,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}"/>
+            <Grid x:Name="SliderArea" Background="White" Grid.Row="1" Margin="0,0,30,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
 
-            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Label x:Name="Filter_Title" Content="FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                <Slider x:Name="Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" />
+                <Label x:Name="Filter_Value" Content="{Binding ElementName=Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+                <Label x:Name="Slider2_Title" Content="SLIDER 2" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
+                <Slider x:Name="Slider2" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" />
+                <Label x:Name="Slider2_Value" Content="{Binding ElementName=Slider2,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
+                <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                <Slider x:Name="Slider3" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" />
+                <Label x:Name="Slider3_Value" Content="{Binding ElementName=Slider3,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            </Grid> <!--SliderArea-->
+
+            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}" Grid.Row="5">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="Export_Label" Content="EXPORT MODEL" Foreground="White" FontFamily="{StaticResource KinectFont}" FontSize="14" Padding="0,0,10,0"/>
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -68,7 +108,7 @@
             <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
             -->
 
-        </Grid>
-    </Grid>
+        </Grid> <!--MenuArea-->
+    </Grid> <!--LayoutGrid-->
 
 </Window>
