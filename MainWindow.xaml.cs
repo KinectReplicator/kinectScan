@@ -6,6 +6,9 @@ namespace kinectScan
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using OpenTK;
+    using OpenTK.Graphics;
+    using OpenTK.Graphics.OpenGL;
 
 
     /// <summary>
@@ -55,6 +58,7 @@ namespace kinectScan
                     break;
                 }
             }
+
 
             if (null != this.sensor)
             {
