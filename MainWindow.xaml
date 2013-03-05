@@ -96,7 +96,7 @@
 
             </Grid> <!--SliderArea-->
 
-            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}" Grid.Row="5">
+            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}" Grid.Row="5" Click="Export_Model_Click">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="Export_Label" Content="EXPORT MODEL" Foreground="White" FontFamily="{StaticResource KinectFont}" FontSize="14" Padding="0,0,10,0"/>
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />

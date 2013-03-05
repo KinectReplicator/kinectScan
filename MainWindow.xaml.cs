@@ -7,6 +7,7 @@ namespace kinectScan
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
     using OpenTK;
+    using System.Diagnostics;
     using OpenTK.Graphics;
     using OpenTK.Graphics.OpenGL;
 
@@ -171,6 +172,34 @@ namespace kinectScan
                         this.colorBitmap.PixelWidth * sizeof(int),
                         0);
                 }
+            }
+        }
+
+        private void Export_Model_Click(object sender, RoutedEventArgs e)
+        {
+            //string input = "porsche.stl";
+            //string output = "Gcode.gcode";
+
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = @"C:\Libraries\Documents\SLic3r\slic3r-console.exe";
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = "slic3r porsche.stl";
+
+            try
+            {
+                // Start the process with the info we specified.
+                // Call WaitForExit and then the using statement will close.
+                using (Process exeProcess = Process.Start(startInfo))
+                {
+                    exeProcess.WaitForExit();
+                }
+            }
+            catch
+            {
+                // Log error.
             }
         }
     }
