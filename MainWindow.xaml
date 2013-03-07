@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:kinectScan"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="kinectScan.MainWindow"
-        Title="kinectScan" Height="630" Width="908" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0" Icon="Images/Kinect.ico">
+        Title="kinectScan" Height="870" Width="1028" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0" Icon="Images/Kinect.ico">
 
     <Window.Resources>
 
@@ -13,13 +13,13 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutGrid"  Margin="0, 0, 0, 0">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="380" />
+            <ColumnDefinition Width="700" />
             <ColumnDefinition Width="30" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
@@ -30,27 +30,33 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="270" />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition Height="270" />
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="510" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="380" />
+                <ColumnDefinition Width="700" />
             </Grid.ColumnDefinitions>
 
             <!-- Depth Camera -->
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="30,30,30, 0" />
-            <Image Name="KinectDepthView" Grid.Row="0" Height="240" Width="320" Margin="30,30,30, 0"/>
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="30,30,350,0" />
+            <Image Name="KinectDepthView" Grid.Row="0" Height="240" Width="320" Margin="30,30,350, 0"/>
             
-            <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom"/>
-            <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
+            <!-- Bilateral Camera-->
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0" />
 
             <!-- Reconstruction Model -->
-            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="240" Width="320" Margin="30,0,30,30" />
-            
-        </Grid> <!--CameraZone-->
+            <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="480" Width="640" Margin="30,0,30,30" />
+
+            <!-- Titles -->
+            <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Bilateral_Title" Content="BILATERAL IMAGE"  Grid.Row="1" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Top"/>
+            <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom"/>
+            <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Grid.RowSpan="2"/>
+
+        </Grid>
+        <!--CameraZone-->
 
         <Grid x:Name="MenuArea" Background="White" Grid.Column="2">
 
@@ -62,9 +68,9 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="520" />
+                <ColumnDefinition Width="290" />
             </Grid.ColumnDefinitions>
-            
+
             <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0"/>
             <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" />
 
@@ -78,9 +84,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="40" />
-                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
+
                 <Label x:Name="Near_Filter_Title" Content="NEAR FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
                 <Slider x:Name="Near_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" Minimum="0.4" Maximum="10"/>
                 <Label x:Name="Near_Filter_Value" Content="{Binding ElementName=Near_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -89,12 +94,13 @@
                 <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="15"/>
                 <Label x:Name="Far_Filter_Value" Content="{Binding ElementName=Far_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-
+<!--
                 <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                 <Slider x:Name="Slider3" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" Minimum="0" Maximum="10"/>
                 <Label x:Name="Slider3_Value" Content="{Binding ElementName=Slider3,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-
-            </Grid> <!--SliderArea-->
+-->
+            </Grid>
+            <!--SliderArea-->
 
             <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}" Grid.Row="5" Click="Export_Model_Click">
                 <StackPanel Orientation="Horizontal">
@@ -108,7 +114,9 @@
             <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
             -->
 
-        </Grid> <!--MenuArea-->
-    </Grid> <!--LayoutGrid-->
+        </Grid>
+        <!--MenuArea-->
+    </Grid>
+    <!--LayoutGrid-->
 
 </Window>

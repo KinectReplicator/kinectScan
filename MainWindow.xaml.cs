@@ -97,6 +97,7 @@ namespace kinectScan
                 this.statusBarText.Content = Properties.Resources.NoKinectReady;
                 this.IR_Title.Content = "";
                 this.Model_Title.Content = "";
+                this.Bilateral_Title.Content = "";
             }
         }
 
