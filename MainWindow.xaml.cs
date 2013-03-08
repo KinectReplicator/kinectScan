@@ -1,6 +1,7 @@
 ﻿
 namespace kinectScan
 {
+    using System;
     using System.IO;
     using System.Windows;
     using System.Windows.Media;
@@ -178,8 +179,9 @@ namespace kinectScan
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("C:\\Users\\Ryan\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\Ryan\\Dropbox\\Capstone\\Slic3r\\Old_Key.obj $s");
 
+            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj $s");
+            Process.Start("explorer.exe", string.Format("/select, \"{0}\"", "C:\\Users\\"+ Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj.gcode"));
         }
     }
 }

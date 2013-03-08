@@ -62,6 +62,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="90" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="120" />
                 <RowDefinition />
                 <RowDefinition Height="100" />
@@ -74,7 +75,21 @@
             <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0"/>
             <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" />
 
-            <Grid x:Name="SliderArea" Background="White" Grid.Row="1" Margin="0,0,30,0">
+            <!--ModelNameArea-->
+            <Grid x:Name="ModelNameArea" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label x:Name="Name_Label" Content="MODEL NAME:" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="0,-3,0,0" />
+                <TextBox x:Name="Model_Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"  Margin="10,0,0,0" Grid.Column="1" />
+            </Grid><!--EndModelNameArea-->
+
+            <Grid x:Name="SliderArea" Background="White" Grid.Row="2" Margin="0,0,30,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                     <RowDefinition Height="40" />
