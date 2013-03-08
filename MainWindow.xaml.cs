@@ -178,7 +178,7 @@ namespace kinectScan
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("C:\\Users\\Cady\\Documents\\Slic3r\\slic3r.exe", "");
+            Process.Start("C:\\Users\\Ryan\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\Ryan\\Dropbox\\Capstone\\Slic3r\\Old_Key.obj $s");
 
         }
     }
