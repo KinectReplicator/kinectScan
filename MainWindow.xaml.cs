@@ -3,22 +3,18 @@ namespace kinectScan
 {
     using System;
     using System.IO;
+    using System.Drawing;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    using OpenTK;
-    using System.Diagnostics;
-    using OpenTK.Graphics;
-    using OpenTK.Graphics.OpenGL;
-
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-
       
         /// <summary>
         /// Active Kinect sensor
@@ -72,7 +68,6 @@ namespace kinectScan
 
                 // Allocate space to put the color pixels we'll create
                 this.colorPixels = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
-
                 // This is the bitmap we'll display on-screen
                 this.colorBitmap = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
 
@@ -132,16 +127,19 @@ namespace kinectScan
                     depthFrame.CopyDepthImagePixelDataTo(this.depthPixels);
 
                     // Get the min and max reliable depth for the current frame
-                    int minDepth = depthFrame.MinDepth;
-                    int maxDepth = depthFrame.MaxDepth;
-
+                    double minDepth = Near_Filter_Slider.Value;
+                    double maxDepth = Far_Filter_Slider.Value;
                     // Convert the depth to RGB
                     int colorPixelIndex = 0;
-                    for (int i = 0; i < this.depthPixels.Length; ++i)
+                    for (int i = 641; i < this.depthPixels.Length - 641; ++i)
                     {
                         // Get the depth for this pixel
-                        short depth = depthPixels[i].Depth;
+                       // short depth = depthPixels[i].Depth;
 
+                        short depth = (Int16)((depthPixels[i - 640].Depth +
+                                               depthPixels[i - 1].Depth + depthPixels[i].Depth + depthPixels[i + 1].Depth +
+                                               depthPixels[i + 640].Depth) / 5);
+                       
                         // To convert to a byte, we're discarding the most-significant
                         // rather than least-significant bits.
                         // We're preserving detail, although the intensity will "wrap."
@@ -176,7 +174,7 @@ namespace kinectScan
                 }
             }
         }
-
+       
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
 
