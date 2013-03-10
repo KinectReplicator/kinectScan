@@ -24,7 +24,8 @@ namespace kinectScan
         /// <summary>
         /// Bitmap that will hold color information
         /// </summary>
-        private WriteableBitmap colorBitmap;
+        private WriteableBitmap colorBitmapDepth;
+        private WriteableBitmap colorBitmapFilter;
 
         /// <summary>
         /// Intermediate storage for the depth data received from the camera
@@ -35,6 +36,7 @@ namespace kinectScan
         /// Intermediate storage for the depth data converted to color
         /// </summary>
         private byte[] colorPixels;
+        private byte[] colorPixels2;
 
         public MainWindow()
         {
@@ -68,14 +70,19 @@ namespace kinectScan
 
                 // Allocate space to put the color pixels we'll create
                 this.colorPixels = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
+                this.colorPixels2 = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
+
                 // This is the bitmap we'll display on-screen
-                this.colorBitmap = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                this.colorBitmapDepth = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                this.colorBitmapFilter = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
 
                 // Set the image we display to point to the bitmap where we'll put the image data
-                this.KinectDepthView.Source = this.colorBitmap;
+                this.KinectDepthView.Source = this.colorBitmapDepth;
+                this.KinectFilterView.Source = this.colorBitmapFilter;
 
                 // Add an event handler to be called whenever there is new depth frame data available
                 this.sensor.DepthFrameReady += this.SensorDepthFrameReady;
+                this.sensor.DepthFrameReady += this.Bilateral_Filter;
 
                 // Start the sensor!
                 try
@@ -131,24 +138,11 @@ namespace kinectScan
                     double maxDepth = Far_Filter_Slider.Value;
                     // Convert the depth to RGB
                     int colorPixelIndex = 0;
-                    for (int i = 641; i < this.depthPixels.Length - 641; ++i)
+                    for (int i = 0; i < this.depthPixels.Length; ++i)
                     {
-                        // Get the depth for this pixel
-                       // short depth = depthPixels[i].Depth;
-
-                        short depth = (Int16)((depthPixels[i - 640].Depth +
-                                               depthPixels[i - 1].Depth + depthPixels[i].Depth + depthPixels[i + 1].Depth +
-                                               depthPixels[i + 640].Depth) / 5);
-                       
-                        // To convert to a byte, we're discarding the most-significant
-                        // rather than least-significant bits.
-                        // We're preserving detail, although the intensity will "wrap."
-                        // Values outside the reliable depth range are mapped to 0 (black).
-
-                        // Note: Using conditionals in this loop could degrade performance.
-                        // Consider using a lookup table instead when writing production code.
-                        // See the KinectDepthViewer class used by the KinectExplorer sample
-                        // for a lookup table example.
+                                             
+                        short depth = depthPixels[i].Depth;
+                                          
                         byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? depth : 0);
 
                         // Write out blue byte
@@ -159,17 +153,67 @@ namespace kinectScan
 
                         // Write out red byte                        
                         this.colorPixels[colorPixelIndex++] = intensity;
-
+                      
                         // We're outputting BGR, the last byte in the 32 bits is unused so skip it
                         // If we were outputting BGRA, we would write alpha here.
                         ++colorPixelIndex;
                     }
 
                     // Write the pixel data into our bitmap
-                    this.colorBitmap.WritePixels(
-                        new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight),
+                    this.colorBitmapDepth.WritePixels(
+                        new Int32Rect(0, 0, this.colorBitmapDepth.PixelWidth, this.colorBitmapDepth.PixelHeight),
                         this.colorPixels,
-                        this.colorBitmap.PixelWidth * sizeof(int),
+                        this.colorBitmapDepth.PixelWidth * sizeof(int),
+                        0);
+                
+                }
+            }
+        }
+
+        private void Bilateral_Filter(object sender, DepthImageFrameReadyEventArgs e)
+        {
+            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
+            {
+
+                if (depthFrame != null)
+                {
+                    // Copy the pixel data from the image to a temporary array
+                    depthFrame.CopyDepthImagePixelDataTo(this.depthPixels);
+
+                    // Get the min and max reliable depth for the current frame
+                    double minDepth = Near_Filter_Slider.Value;
+                    double maxDepth = Far_Filter_Slider.Value;
+                    // Convert the depth to RGB
+                    int colorPixelIndex = 0;
+                    for (int i = 641; i < this.depthPixels.Length - 641; ++i)
+                    {
+
+                        short depthaverage = (Int16)((depthPixels[i - 641].Depth + (2*depthPixels[i - 640].Depth) + depthPixels[i - 639].Depth +
+                                                     (2*depthPixels[i - 1].Depth) + (4*depthPixels[i].Depth) + (2*depthPixels[i + 2].Depth) +
+                                                     depthPixels[i + 639].Depth + (2*depthPixels[i + 640].Depth) + depthPixels[i + 641].Depth) / 14);
+
+                        byte intensity = (byte)(depthaverage >= minDepth && depthaverage <= maxDepth ? depthaverage : 0);
+
+                        // Write out blue byte
+                        this.colorPixels2[colorPixelIndex++] = intensity;
+
+                        // Write out green byte
+                        this.colorPixels2[colorPixelIndex++] = intensity;
+
+                        // Write out red byte                        
+                        this.colorPixels2[colorPixelIndex++] = intensity;
+
+                        // We're outputting BGR, the last byte in the 32 bits is unused so skip it
+                        // If we were outputting BGRA, we would write alpha here.
+                        ++colorPixelIndex;
+                    }
+
+
+                    // Write the pixel data into our bitmap
+                    this.colorBitmapFilter.WritePixels(
+                        new Int32Rect(0, 0, this.colorBitmapFilter.PixelWidth, this.colorBitmapFilter.PixelHeight),
+                        this.colorPixels2,
+                        this.colorBitmapFilter.PixelWidth * sizeof(int),
                         0);
                 }
             }
