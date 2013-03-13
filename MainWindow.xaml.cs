@@ -259,7 +259,7 @@ namespace kinectScan
 
             GeometryModel3D msheet = new GeometryModel3D();
             msheet.Geometry = tmesh;
-            msheet.Material = new DiffuseMaterial(new SolidColorBrush(Colors.RoyalBlue));
+            msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
             return msheet;
         }
 
