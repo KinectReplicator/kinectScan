@@ -49,6 +49,7 @@
 
             <!-- Reconstruction Model -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="480" Width="640" Margin="30,0,30,30" />
+            <Image Name="KinectNormalView" Grid.Row="3" Height="480" Width="640" Margin="30,0,30,30"/>
 
             <!-- Titles -->
             <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
