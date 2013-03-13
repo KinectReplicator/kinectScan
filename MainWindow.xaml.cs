@@ -2,15 +2,24 @@
 namespace kinectScan
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.IO;
     using System.Drawing;
     using System.Diagnostics;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
-
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -23,19 +32,11 @@ namespace kinectScan
         private KinectSensor sensor;
 
         /// <summary>
-        /// Bitmap that will hold color information
+        /// Storage for 3D model
         /// </summary>
-        private WriteableBitmap colorBitmapDepth, colorBitmapFilter, colorBitmapNormal;
+        GeometryModel3D[] points = new GeometryModel3D[320 * 240];
 
-        /// <summary>
-        /// Intermediate storage for the depth data received from the camera
-        /// </summary>
-        private DepthImagePixel[] depthPixels;
-
-        /// <summary>
-        /// Intermediate storage for the depth data converted to color
-        /// </summary>
-        private byte[] colorPixels, colorPixels2, colorPixels3;
+        int s = 2;
 
         public MainWindow()
         {
@@ -62,31 +63,51 @@ namespace kinectScan
             if (null != this.sensor)
             {
                 //Start the depth stream
-                this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                this.sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
 
-                // Allocate space to put the depth pixels we'll receive
-                this.depthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
+                DirectionalLight DirLight1 = new DirectionalLight();
+                DirLight1.Color = Colors.White;
+                DirLight1.Direction = new Vector3D(1, 1, 1);
 
-                // Allocate space to put the color pixels we'll create
-                this.colorPixels = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
-                this.colorPixels2 = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
-                //this.colorPixels3 = new byte[this.sensor.DepthStream.FramePixelDataLength * sizeof(int)];
+                PerspectiveCamera Camera1 = new PerspectiveCamera();
+                Camera1.FarPlaneDistance = 8000;
+                Camera1.NearPlaneDistance = 100;
+                Camera1.FieldOfView = 10;
+                Camera1.Position = new Point3D(160, 120, -1000);
+                Camera1.LookDirection = new Vector3D(0, 0, 1);
+                Camera1.UpDirection = new Vector3D(0, -1, 0);
 
-                // This is the bitmap we'll display on-screen
-                this.colorBitmapDepth = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-                this.colorBitmapFilter = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-               // this.colorBitmapNormal = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                Model3DGroup modelGroup = new Model3DGroup();
 
+                int i = 0;
+                for (int y = 0; y < 240; y += s)
+                {
+                    for (int x = 0; x < 320; x += s)
+                    {
+                        points[i] = Triangle(x, y, s);
+                        points[i].Transform = new TranslateTransform3D(0, 0, 0);
+                        modelGroup.Children.Add(points[i]);
+                        i++;
+                    }
+                }
 
-                // Set the image we display to point to the bitmap where we'll put the image data
-                this.KinectDepthView.Source = this.colorBitmapDepth;
-                this.KinectFilterView.Source = this.colorBitmapFilter;
-                //this.KinectNormalView.Source = this.colorBitmapFilter;
+                modelGroup.Children.Add(DirLight1);
+                ModelVisual3D modelsVisual = new ModelVisual3D();
+                modelsVisual.Content = modelGroup;
+                Viewport3D myViewport = new Viewport3D();
+                myViewport.IsHitTestVisible = false;
+                myViewport.Camera = Camera1;
+                myViewport.Children.Add(modelsVisual);
+                KinectNormalView.Children.Add(myViewport);
+
+                myViewport.Height = KinectNormalView.Height;
+                myViewport.Width = KinectNormalView.Width;
+                Canvas.SetTop(myViewport, 0);
+                Canvas.SetLeft(myViewport, 0);
 
                 // Add an event handler to be called whenever there is new depth frame data available
                 this.sensor.DepthFrameReady += this.SensorDepthFrameReady;
-                this.sensor.DepthFrameReady += this.Bilateral_Filter;
-                this.sensor.DepthFrameReady += this.Normal_Map;
+               // this.sensor.DepthFrameReady += this.Bilateral_Filter;
 
                 // Start the sensor!
                 try
@@ -128,54 +149,40 @@ namespace kinectScan
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void SensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        void SensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            DepthImagePixel[] tempDepthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
 
-            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
+            DepthImageFrame imageFrame = e.OpenDepthImageFrame();
+            if (imageFrame != null)
             {
-                if (depthFrame != null)
+                short[] pixelData = new short[imageFrame.PixelDataLength];
+                imageFrame.CopyPixelDataTo(pixelData);
+
+                // Get the min and max reliable depth for the current frame
+                double minDepth = Near_Filter_Slider.Value;
+                double maxDepth = Far_Filter_Slider.Value;
+
+                int temp = 0;
+                int i = 0;
+
+                for (int y = 0; y < 240; y += s)
                 {
-                    // Copy the pixel data from the image to a temporary array
-                    depthFrame.CopyDepthImagePixelDataTo(tempDepthPixels);
-
-                    // Get the min and max reliable depth for the current frame
-                    double minDepth = Near_Filter_Slider.Value;
-                    double maxDepth = Far_Filter_Slider.Value;
-                    // Convert the depth to RGB
-                    int colorPixelIndex = 0;
-                    for (int i = 0; i < this.depthPixels.Length; ++i)
+                    for (int x = 0; x < 320; x += s)
                     {
-                                             
-                        short depth = depthPixels[i].Depth;
-                                          
-                        byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? depth : 0);
+                        temp = ((ushort)pixelData[x + y * 320]) >> 3;
+                        ((TranslateTransform3D)points[i].Transform).OffsetZ = temp;
+                        i++;
 
-                        // Write out blue byte
-                        this.colorPixels[colorPixelIndex++] = intensity;
-
-                        // Write out green byte
-                        this.colorPixels[colorPixelIndex++] = intensity;
-
-                        // Write out red byte                        
-                        this.colorPixels[colorPixelIndex++] = intensity;
-                      
-                        // We're outputting BGR, the last byte in the 32 bits is unused so skip it
-                        // If we were outputting BGRA, we would write alpha here.
-                        ++colorPixelIndex;
                     }
-
-                    // Write the pixel data into our bitmap
-                    this.colorBitmapDepth.WritePixels(
-                        new Int32Rect(0, 0, this.colorBitmapDepth.PixelWidth, this.colorBitmapDepth.PixelHeight),
-                        this.colorPixels,
-                        this.colorBitmapDepth.PixelWidth * sizeof(int), 0);
-                
                 }
+
+                this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
+
             }
+           
         }
 
-        private void Bilateral_Filter(object sender, DepthImageFrameReadyEventArgs e)
+      /*  private void Bilateral_Filter(object sender, DepthImageFrameReadyEventArgs e)
         {
             DepthImagePixel[] tempDepthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
 
@@ -231,62 +238,46 @@ namespace kinectScan
                         this.colorBitmapFilter.PixelWidth * sizeof(int), 0);
                 }
             }
+        }*/
+
+        private GeometryModel3D Triangle(double x, double y, double s)
+        {
+            Point3DCollection corners = new Point3DCollection();
+            corners.Add(new Point3D(x, y, 0));
+            corners.Add(new Point3D(x, y + s, 0));
+            corners.Add(new Point3D(x + s, y + s, 0));
+
+            Int32Collection Triangles = new Int32Collection();
+            Triangles.Add(0);
+            Triangles.Add(1);
+            Triangles.Add(2);
+
+            MeshGeometry3D tmesh = new MeshGeometry3D();
+            tmesh.Positions = corners;
+            tmesh.TriangleIndices = Triangles;
+            tmesh.Normals.Add(new Vector3D(0, 0, -1));
+
+            GeometryModel3D msheet = new GeometryModel3D();
+            msheet.Geometry = tmesh;
+            msheet.Material = new DiffuseMaterial(new SolidColorBrush(Colors.RoyalBlue));
+            return msheet;
         }
 
-        private void Normal_Map(object sender, DepthImageFrameReadyEventArgs e)
+        BitmapSource DepthToBitmapSource(
+                DepthImageFrame imageFrame)
         {
-            DepthImagePixel[] tempDepthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
+            short[] pixelData = new short[imageFrame.PixelDataLength];
+            imageFrame.CopyPixelDataTo(pixelData);
 
-            Vector3D[] XYDepth = new Vector3D[this.depthPixels.Length];
-            Vector3D[] normalMap = new Vector3D[this.depthPixels.Length];
-
-            int colorPixelIndex = 0;
-            
-            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
-            {
-
-                if (depthFrame != null)
-                {
-                    depthFrame.CopyDepthImagePixelDataTo(tempDepthPixels);
-
-                    for (int x = 0; x < 640; ++x)
-                    {
-
-                        for (int y = 0; y < 480; ++y)
-                        {
-                            if (tempDepthPixels[x + y].Depth != 0)
-                            {
-                                XYDepth[x + y] = new Vector3D(x, y, tempDepthPixels[x + y].Depth);
-                            }
-
-                        }
-
-                    }
-
-                    for (int i = 0; i < this.depthPixels.Length - 641; ++i)
-                    {
-                        normalMap[i] = Vector3D.CrossProduct(XYDepth[i + 1], XYDepth[i + 640]);
-
-                       // this.colorPixels3[colorPixelIndex++] = (byte)normalMap[i].X;
-
-                        // Write out green byte
-                        //this.colorPixels3[colorPixelIndex++] = (byte)normalMap[i].Y;
-                        // Write out red byte                        
-                        //this.colorPixels3[colorPixelIndex++] = (byte)normalMap[i].Z;
-                        //++colorPixelIndex;
-
-                    }
-
-
-                    // Write the pixel data into our bitmap
-                    //this.colorBitmapNormal.WritePixels(
-                      //  new Int32Rect(0, 0, this.colorBitmapNormal.PixelWidth, this.colorBitmapNormal.PixelHeight),
-                        //this.colorPixels3,
-                        //this.colorBitmapNormal.PixelWidth * sizeof(int), 0);
-                }
-            }
-
-
+            BitmapSource bmap = BitmapSource.Create(
+             imageFrame.Width,
+             imageFrame.Height,
+             96, 96,
+             PixelFormats.Gray16,
+             null,
+             pixelData,
+             imageFrame.Width * imageFrame.BytesPerPixel);
+            return bmap;
         }
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
