@@ -165,6 +165,8 @@ namespace kinectScan
                     for (int x = 0; x < 320; x += s)
                     {
                         temp = ((ushort)pixelData[x + y * 320]) >> 3;
+                        //filter depth
+                        temp = (temp >= minDepth && temp <= maxDepth ? temp : (ushort) maxDepth);
                         ((TranslateTransform3D)points[i].Transform).OffsetZ = temp;
                         i++;
 
@@ -174,64 +176,6 @@ namespace kinectScan
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }
         }
-
-      /*  private void Bilateral_Filter(object sender, DepthImageFrameReadyEventArgs e)
-        {
-            DepthImagePixel[] tempDepthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
-
-            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
-            {
-
-                if (depthFrame != null)
-                {
-                    // Copy the pixel data from the image to a temporary array
-                    depthFrame.CopyDepthImagePixelDataTo(tempDepthPixels);
-                     
-                    // Get the min and max reliable depth for the current frame
-                    double minDepth = Near_Filter_Slider.Value;
-                    double maxDepth = Far_Filter_Slider.Value;
-                    // Convert the depth to RGB
-                    int colorPixelIndex = 0;
-
-                    for (int i = 0; i < this.depthPixels.Length; ++i)
-                    {
-                        tempDepthPixels[i].Depth = (Int16)(tempDepthPixels[i].Depth >= minDepth && tempDepthPixels[i].Depth <= maxDepth ? tempDepthPixels[i].Depth : 0);
-                    }
-
-                    for (int i = 641; i < this.depthPixels.Length - 641; ++i)
-                    {
-
-                        short depthaverage2 = (Int16)((tempDepthPixels[i - 1].Depth + (2 * tempDepthPixels[i].Depth) + tempDepthPixels[i + 1].Depth) / 4);
-
-                        short depthaverage = (Int16)((tempDepthPixels[i - 640].Depth + (2 * depthaverage2) + tempDepthPixels[i + 640].Depth) / 4);
-
-                        this.depthPixels[i].Depth = depthaverage;
-
-                        byte intensity = (byte)(depthaverage >= minDepth && depthaverage <= maxDepth ? depthaverage : 0);
-
-                        // Write out blue byte
-                        this.colorPixels2[colorPixelIndex++] = intensity;
-
-                        // Write out green byte
-                        this.colorPixels2[colorPixelIndex++] = intensity;
-
-                        // Write out red byte                        
-                        this.colorPixels2[colorPixelIndex++] = intensity;
-
-                        // We're outputting BGR, the last byte in the 32 bits is unused so skip it
-                        // If we were outputting BGRA, we would write alpha here.
-                        ++colorPixelIndex;
-                    }
-
-
-                    // Write the pixel data into our bitmap
-                    this.colorBitmapFilter.WritePixels(
-                        new Int32Rect(0, 0, this.colorBitmapFilter.PixelWidth, this.colorBitmapFilter.PixelHeight),
-                        this.colorPixels2,
-                        this.colorBitmapFilter.PixelWidth * sizeof(int), 0);
-                }
-            }
-        }*/
 
         private GeometryModel3D Triangle(double x, double y, double s)
         {

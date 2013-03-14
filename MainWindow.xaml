@@ -108,14 +108,9 @@
                 <Label x:Name="Near_Filter_Value" Content="{Binding ElementName=Near_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="Far_Filter_Title" Content="MAX FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="8000" Value="8000"/>
+                <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="7000" Value="2500"/>
                 <Label x:Name="Far_Filter_Value" Content="{Binding ElementName=Far_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-<!--
-                <Label x:Name="Slider3_Title" Content="SLIDER 3" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                <Slider x:Name="Slider3" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" Minimum="0" Maximum="10"/>
-                <Label x:Name="Slider3_Value" Content="{Binding ElementName=Slider3,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
--->
             </Grid>
             <!--SliderArea-->
 
@@ -125,12 +120,6 @@
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
             </Button>
-
-            <!--
-            <RadioButton x:Name="STL_Sel" Content="STL" HorizontalAlignment="Left"  Margin="230,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" IsChecked="True" Height="25" GroupName="Model_Sel"/>
-            <RadioButton x:Name="Blend_Sel" Content="BLEND" HorizontalAlignment="Left"  Margin="290,0,0,30" VerticalAlignment="Bottom" Style="{StaticResource KinectSettingsPanel}" Height="25" Background="Black" GroupName="Model_Sel"/>
-            -->
-
         </Grid>
         <Button Content="Button" Name="test" Grid.Column="2" HorizontalAlignment="Left" Margin="98,305,0,0" VerticalAlignment="Top" Width="75" Click="test_Click"/>
         <!--MenuArea-->
