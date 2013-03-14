@@ -2,22 +2,17 @@
 namespace kinectScan
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.IO;
     using System.Drawing;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using System.Windows.Navigation;
-    using System.Windows.Shapes;
-
     using System.Windows.Media.Media3D;
+
+    using HelixToolkit.Wpf;
+
     using Microsoft.Kinect;
     
     /// <summary>
@@ -25,16 +20,17 @@ namespace kinectScan
     /// </summary>
     public partial class MainWindow : Window
     {
-      
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
         private KinectSensor sensor;
-
+        
         /// <summary>
         /// Storage for 3D model
         /// </summary>
         GeometryModel3D[] points = new GeometryModel3D[320 * 240];
+
+        Model3DGroup modelGroup = new Model3DGroup();
 
         int s = 2;
 
@@ -59,7 +55,6 @@ namespace kinectScan
                 }
             }
 
-
             if (null != this.sensor)
             {
                 //Start the depth stream
@@ -77,7 +72,7 @@ namespace kinectScan
                 Camera1.LookDirection = new Vector3D(0, 0, 1);
                 Camera1.UpDirection = new Vector3D(0, -1, 0);
 
-                Model3DGroup modelGroup = new Model3DGroup();
+                //Model3DGroup modelGroup = new Model3DGroup();
 
                 int i = 0;
                 for (int y = 0; y < 240; y += s)
@@ -86,14 +81,14 @@ namespace kinectScan
                     {
                         points[i] = Triangle(x, y, s);
                         points[i].Transform = new TranslateTransform3D(0, 0, 0);
-                        modelGroup.Children.Add(points[i]);
+                        this.modelGroup.Children.Add(points[i]);
                         i++;
                     }
                 }
 
-                modelGroup.Children.Add(DirLight1);
+                this.modelGroup.Children.Add(DirLight1);
                 ModelVisual3D modelsVisual = new ModelVisual3D();
-                modelsVisual.Content = modelGroup;
+                modelsVisual.Content = this.modelGroup;
                 Viewport3D myViewport = new Viewport3D();
                 myViewport.IsHitTestVisible = false;
                 myViewport.Camera = Camera1;
@@ -104,7 +99,7 @@ namespace kinectScan
                 myViewport.Width = KinectNormalView.Width;
                 Canvas.SetTop(myViewport, 0);
                 Canvas.SetLeft(myViewport, 0);
-
+                
                 // Add an event handler to be called whenever there is new depth frame data available
                 this.sensor.DepthFrameReady += this.SensorDepthFrameReady;
                // this.sensor.DepthFrameReady += this.Bilateral_Filter;
@@ -177,9 +172,7 @@ namespace kinectScan
                 }
 
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
-
             }
-           
         }
 
       /*  private void Bilateral_Filter(object sender, DepthImageFrameReadyEventArgs e)
@@ -263,8 +256,7 @@ namespace kinectScan
             return msheet;
         }
 
-        BitmapSource DepthToBitmapSource(
-                DepthImageFrame imageFrame)
+        BitmapSource DepthToBitmapSource(DepthImageFrame imageFrame)
         {
             short[] pixelData = new short[imageFrame.PixelDataLength];
             imageFrame.CopyPixelDataTo(pixelData);
@@ -285,6 +277,17 @@ namespace kinectScan
 
             Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj $s");
             Process.Start("explorer.exe", string.Format("/select, \"{0}\"", "C:\\Users\\"+ Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj.gcode"));
+        }
+
+        private void test_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = "model.obj";
+            using (var exporter = new ObjExporter(fileName))
+            {
+                exporter.Export(this.modelGroup);
+            }
+
+            Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
         }
     }
 }
