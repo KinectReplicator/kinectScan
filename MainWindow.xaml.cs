@@ -95,7 +95,7 @@ namespace kinectScan
                 myViewport.Children.Add(modelsVisual);
                 KinectNormalView.Children.Add(myViewport);
 
-                this.test_text.Text = this.modelGroup.ToString();
+                //this.test_text.Text = this.modelGroup.ToString();
                 myViewport.Height = KinectNormalView.Height;
                 myViewport.Width = KinectNormalView.Width;
                 Canvas.SetTop(myViewport, 0);

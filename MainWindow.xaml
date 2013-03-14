@@ -120,9 +120,9 @@
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
             </Button>
-            <TextBox Name="test_text" HorizontalAlignment="Left" Height="109" Margin="42,124,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="209"/>
+            <!-- <TextBox Name="test_text" HorizontalAlignment="Left" Height="109" Margin="42,124,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="209"/> -->
         </Grid>
-        <Button Content="Button" Name="test" Grid.Column="2" HorizontalAlignment="Left" Margin="98,305,0,0" VerticalAlignment="Top" Width="75" Click="test_Click"/>
+        <Button Content="CAPTURE MODEL" Name="test" Grid.Column="2" HorizontalAlignment="Left" Margin="30,0,0,100" VerticalAlignment="Bottom" Style="{StaticResource KinectButton}" Click="test_Click"/>
         <!--MenuArea-->
     </Grid>
     <!--LayoutGrid-->
