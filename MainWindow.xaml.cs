@@ -166,7 +166,7 @@ namespace kinectScan
                     {
                         temp = ((ushort)pixelData[x + y * 320]) >> 3;
                         //filter depth
-                        temp = (temp >= minDepth && temp <= maxDepth ? temp : (ushort) maxDepth);
+                        temp = (temp >= minDepth && temp <= maxDepth ? temp : -1001);
                         ((TranslateTransform3D)points[i].Transform).OffsetZ = temp;
                         i++;
 
@@ -225,13 +225,18 @@ namespace kinectScan
 
         private void test_Click(object sender, RoutedEventArgs e)
         {
-            string fileName = "model.obj";
+            string fileName = this.Model_Name.Text;
             using (var exporter = new ObjExporter(fileName))
             {
                 exporter.Export(this.modelGroup);
             }
 
             Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
+        }
+
+        private void Begin_Scan_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
