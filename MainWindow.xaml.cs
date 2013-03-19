@@ -2,7 +2,10 @@
 namespace kinectScan
 {
     using System;
+    using System.ComponentModel;
+    using System.Globalization;
     using System.IO;
+    using System.Threading.Tasks;
     using System.Drawing;
     using System.Diagnostics;
     using System.Windows;
@@ -11,9 +14,9 @@ namespace kinectScan
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
 
-    using HelixToolkit.Wpf;
-
     using Microsoft.Kinect;
+    using Microsoft.Kinect.Toolkit;
+    using Microsoft.Kinect.Toolkit.Fusion;
     
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -215,26 +218,6 @@ namespace kinectScan
              pixelData,
              imageFrame.Width * imageFrame.BytesPerPixel);
             return bmap;
-        }
-
-        private void Export_Model_Click(object sender, RoutedEventArgs e)
-        {
-
-            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\eve_online_scorpion_final.stl $s");
-            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\dolphin.stl $s");
-           
-            Process.Start("explorer.exe", @"C:\Users\Ryan\Dropbox\Capstone\Slic3r\objs");
-        }
-       // "/select, \"{0}\"",
-        private void test_Click(object sender, RoutedEventArgs e)
-        {
-            string fileName = this.Model_Name.Text;
-            using (var exporter = new ObjExporter(fileName))
-            {
-                exporter.Export(this.modelGroup);
-            }
-
-            Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
         }
 
         private void Begin_Scan_Click(object sender, RoutedEventArgs e)
