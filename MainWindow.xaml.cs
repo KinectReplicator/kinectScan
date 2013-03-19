@@ -220,12 +220,10 @@ namespace kinectScan
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
 
-            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\eve_online_scorpion_final.stl $s");
-            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\dolphin.stl $s");
-           
-            Process.Start("explorer.exe", @"C:\Users\Ryan\Dropbox\Capstone\Slic3r\objs");
+            Process.Start("C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\slic3r-console.exe", "C:\\Users\\" + Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj $s");
+            Process.Start("explorer.exe", string.Format("/select, \"{0}\"", "C:\\Users\\"+ Environment.UserName + "\\Dropbox\\Capstone\\Slic3r\\objs\\Old_Key.obj.gcode"));
         }
-       // "/select, \"{0}\"",
+
         private void test_Click(object sender, RoutedEventArgs e)
         {
             string fileName = this.Model_Name.Text;
