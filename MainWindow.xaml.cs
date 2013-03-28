@@ -1,7 +1,9 @@
 ﻿
+
 namespace kinectScan
 {
     using System;
+    using System.ComponentModel;
     using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
@@ -14,150 +16,35 @@ namespace kinectScan
     using System.Windows.Media.Media3D;
 
     using Microsoft.Kinect;
-    using Microsoft.Kinect.Toolkit;
-    using Microsoft.Kinect.Toolkit.Fusion;
-
-
-    /// <summary>
-    /// A struct containing depth image pixels and frame timestamp
-    /// </summary>
-    internal struct DepthData
-    {
-        public DepthImagePixel[] DepthImagePixels;
-        public long FrameTimestamp;
-    }
+    //using Microsoft.Kinect.Toolkit;
+    //using Microsoft.Kinect.Toolkit.Fusion;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Variables
-        /// <summary>
-        /// Track whether Dispose has been called
-        /// </summary>
-        private bool disposed;
-
-        /// <summary>
-        /// Image width of depth frame
-        /// </summary>
-        private int width = 0;
-
-        /// <summary>
-        /// Image height of depth frame
-        /// </summary>
-        private int height = 0;
-
-        /// <summary>
-        /// Format of depth image to use
-        /// </summary>
-        private const DepthImageFormat ImageFormat = DepthImageFormat.Resolution320x240Fps30;
-
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
         private KinectSensor sensor;
 
         /// <summary>
-        /// Kinect sensor chooser object
-        /// </summary>
-        private KinectSensorChooser sensorChooser;
-
-        /// <summary>
         /// Storage for 3D model
         /// </summary>
         GeometryModel3D[] points = new GeometryModel3D[320 * 240];
-
+        public int[] Depth = new int[320 * 240];
         Model3DGroup modelGroup = new Model3DGroup();
 
-
-        int s = 2;
-        #endregion
+        //int s = 2;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        #region Garbage
-        /// <summary>
-        /// Finalizes an instance of the MainWindow class.
-        /// This destructor will run only if the Dispose method does not get called.
-        /// </summary>
-        ~MainWindow()
-        {
-            this.Dispose(false);
-        }
-
-        /// <summary>
-        /// Dispose resources
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true);
-
-            // This object will be cleaned up by the Dispose method.
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Frees all memory associated with the FusionImageFrame.
-        /// </summary>
-        /// <param name="disposing">Whether the function was called from Dispose.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            /* if (!this.disposed)
-             {
-                 if (disposing)
-                 {
-                     if (null != this.depthFloatFrame)
-                     {
-                         this.depthFloatFrame.Dispose();
-                     }
-
-                     if (null != this.deltaFromReferenceFrame)
-                     {
-                         this.deltaFromReferenceFrame.Dispose();
-                     }
-
-                     if (null != this.shadedSurfaceFrame)
-                     {
-                         this.shadedSurfaceFrame.Dispose();
-                     }
-
-                     if (null != this.shadedSurfaceNormalsFrame)
-                     {
-                         this.shadedSurfaceNormalsFrame.Dispose();
-                     }
-
-                     if (null != this.pointCloudFrame)
-                     {
-                         this.pointCloudFrame.Dispose();
-                     }
-
-                     if (null != this.volume)
-                     {
-                         this.volume.Dispose();
-                     }
-                 }
-             } */
-
-            this.disposed = true;
-        }
-        #endregion
-
-        /// <summary>
-        /// Execute startup tasks
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            
-            //this.sensorChooser = new KinectSensorChooser();
-            //this.sensorChooserUI.KinectSensorChooser = this.sensorChooser;
-            //this.sensorChooser.KinectChanged += this.OnKinectSensorChanged;
-            //this.sensorChooser.Start();
 
             // Look through all sensors and start the first connected one.
             // This requires that a Kinect is connected at the time of app startup.
@@ -172,11 +59,10 @@ namespace kinectScan
                 }
             }
 
-
             if (null != this.sensor)
             {
                 //Start the depth stream
-               this.sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
+                this.sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
 
                 DirectionalLight DirLight1 = new DirectionalLight();
                 DirLight1.Color = Colors.White;
@@ -193,11 +79,11 @@ namespace kinectScan
                 //Model3DGroup modelGroup = new Model3DGroup();
 
                 int i = 0;
-                for (int y = 0; y < 240; y += s)
+                for (int y = 0; y < 239; y++)
                 {
-                    for (int x = 0; x < 320; x += s)
+                    for (int x = 0; x < 319; x++)
                     {
-                        points[i] = Triangle(x, y, s);
+                        points[i] = Triangle(x, y);
                         points[i].Transform = new TranslateTransform3D(0, 0, 0);
                         this.modelGroup.Children.Add(points[i]);
                         i++;
@@ -221,8 +107,9 @@ namespace kinectScan
 
                 // Add an event handler to be called whenever there is new depth frame data available
                 this.sensor.DepthFrameReady += this.SensorDepthFrameReady;
-            
-             // Start the sensor!
+                // this.sensor.DepthFrameReady += this.Bilateral_Filter;
+
+                // Start the sensor!
                 try
                 {
                     this.sensor.Start();
@@ -249,177 +136,10 @@ namespace kinectScan
         /// <param name="e">event arguments</param>
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Stop timer
-            /* if (null != this.fpsTimer)
-             {
-                 this.fpsTimer.Stop();
-                 this.fpsTimer.Tick -= this.FpsTimerTick;
-             }*/
-
-            // Unregister Kinect sensor chooser event
-            if (null != this.sensorChooser)
-            {
-                this.sensorChooser.KinectChanged -= this.OnKinectSensorChanged;
-            }
-
-            // Stop sensor
+            // Stop the sensor!
             if (null != this.sensor)
             {
                 this.sensor.Stop();
-                this.sensor.DepthFrameReady -= this.OnDepthFrameReady;
-            }
-        }
-
-        /// <summary>
-        /// Handler function for Kinect changed event
-        /// </summary>
-        /// <param name="sender">Event generator</param>
-        /// <param name="e">Event parameter</param>
-        private void OnKinectSensorChanged(object sender, KinectChangedEventArgs e)
-        {
-            // Check new sensor's status
-            if (this.sensor != e.NewSensor)
-            {
-                // Stop old sensor
-                if (null != this.sensor)
-                {
-                    this.sensor.Stop();
-                    this.sensor.DepthFrameReady -= this.OnDepthFrameReady;
-                }
-
-                this.sensor = null;
-
-                if (null != e.NewSensor && KinectStatus.Connected == e.NewSensor.Status)
-                {
-                    // Start new sensor
-                    this.sensor = e.NewSensor;
-                    this.StartDepthStream(ImageFormat);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handler for FPS timer tick
-        /// </summary>
-        /// <param name="sender">Object sending the event</param>
-        /// <param name="e">Event arguments</param>
-        private void FpsTimerTick(object sender, EventArgs e)
-        {
-          /*  if (!this.savingMesh)
-            {
-                if (null == this.sensor)
-                {
-                    // Show "No ready Kinect found!" on status bar
-                    this.statusBarText.Text = Properties.Resources.NoReadyKinect;
-                }
-                else
-                {
-                    // Calculate time span from last calculation of FPS
-                    double intervalSeconds = (DateTime.Now - this.lastFPSTimestamp).TotalSeconds;
-
-                    // Calculate and show fps on status bar
-                    this.statusBarText.Text = string.Format(
-                        System.Globalization.CultureInfo.InvariantCulture,
-                        Properties.Resources.Fps,
-                        (double)this.processedFrameCount / intervalSeconds);
-                }
-            }
-
-            // Reset frame counter
-            this.processedFrameCount = 0;
-            this.lastFPSTimestamp = DateTime.Now; */
-        }
-
-        /// <summary>
-        /// Reset FPS timer and counter
-        /// </summary>
-        private void ResetFps()
-        {
-           /* // Restart fps timer
-            if (null != this.fpsTimer)
-            {
-                this.fpsTimer.Stop();
-                this.fpsTimer.Start();
-            }
-
-            // Reset frame counter
-            this.processedFrameCount = 0;
-            this.lastFPSTimestamp = DateTime.Now; */
-        }
-
-        /// <summary>
-        /// Start depth stream at specific resolution
-        /// </summary>
-        /// <param name="format">The resolution of image in depth stream</param>
-        private void StartDepthStream(DepthImageFormat format)
-        {
-            try
-            {
-                // Enable depth stream, register event handler and start
-                this.sensor.DepthStream.Enable(format);
-                this.sensor.DepthFrameReady += this.OnDepthFrameReady;
-                this.sensor.Start();
-            }
-            catch (IOException ex)
-            {
-                // Device is in use
-                this.sensor = null;
-                this.ShowStatusMessage(ex.Message);
-
-                return;
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Device is not valid, not supported or hardware feature unavailable
-                this.sensor = null;
-                this.ShowStatusMessage(ex.Message);
-
-                return;
-            }
-            /*
-            // Create volume
-            if (this.RecreateReconstruction())
-            {
-                // Show introductory message
-                this.ShowStatusMessage(Properties.Resources.IntroductoryMessage);
-            } */
-        }
-
-        /// <summary>
-        /// Event handler for Kinect sensor's DepthFrameReady event
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void OnDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
-        {
-            // Open depth frame
-            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
-            {
-                if (null != depthFrame) // && !this.processing)
-                {
-                    DepthData depthData = new DepthData();
-
-                    // Save frame timestamp
-                    depthData.FrameTimestamp = depthFrame.Timestamp;
-
-                    // Create local depth pixels buffer
-                    depthData.DepthImagePixels = new DepthImagePixel[depthFrame.PixelDataLength];
-
-                    // Copy depth pixels to local buffer
-                    depthFrame.CopyDepthImagePixelDataTo(depthData.DepthImagePixels);
-
-                    this.width = depthFrame.Width;
-                    this.height = depthFrame.Height;
-
-                    // Use dispatcher object to invoke ProcessDepthData function to process
-                    /*this.Dispatcher.BeginInvoke(
-                                        DispatcherPriority.Background,
-                                        (Action<DepthData>)((d) => { this.ProcessDepthData(d); }),
-                                        depthData);
-
-                    // Mark one frame will be processed
-                    this.processing = true;*/
-                }
             }
         }
 
@@ -442,17 +162,17 @@ namespace kinectScan
                 double minDepth = Near_Filter_Slider.Value;
                 double maxDepth = Far_Filter_Slider.Value;
 
-                int temp = 0;
+
                 int i = 0;
 
-                for (int y = 0; y < 240; y += s)
+                for (int y = 0; y < 239; y++)
                 {
-                    for (int x = 0; x < 320; x += s)
+                    for (int x = 0; x < 319; x++)
                     {
-                        temp = ((ushort)pixelData[x + y * 320]) >> 3;
+                        this.Depth[x + y * 320] = ((ushort)pixelData[x + y * 320]) >> 3;
                         //filter depth
-                        temp = (temp >= minDepth && temp <= maxDepth ? temp : -1001);
-                        ((TranslateTransform3D)points[i].Transform).OffsetZ = temp;
+                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : -1001);
+                        ((TranslateTransform3D)points[i].Transform).OffsetZ = this.Depth[x + y * 320];
                         i++;
 
                     }
@@ -462,24 +182,36 @@ namespace kinectScan
             }
         }
 
-        private GeometryModel3D Triangle(double x, double y, double s)
+        private GeometryModel3D Triangle(int x, int y)
         {
+
+            int i = 0;
             Point3DCollection corners = new Point3DCollection();
-            corners.Add(new Point3D(x, y, 0));
-            corners.Add(new Point3D(x, y + s, 0));
-            corners.Add(new Point3D(x + s, y + s, 0));
-            corners.Add(new Point3D(x + s, y, 0));
+
+            corners.Add(new Point3D(x, y + 1, this.Depth[x + ((y + 1) * 320)]));
+            corners.Add(new Point3D(x + 1, y + 1, this.Depth[(x + 1) + ((y + 1) * 320)]));
+            corners.Add(new Point3D(x + 1, y, this.Depth[(x + 1) + (y * 320)]));
+            corners.Add(new Point3D(x + 1, y, this.Depth[(x + 1) + (y * 320)]));
+            corners.Add(new Point3D(x, y, this.Depth[x + (y * 320)]));
+            corners.Add(new Point3D(x, y + 1, this.Depth[x + ((y + 1) * 320)]));
 
             Int32Collection Triangles = new Int32Collection();
-            Triangles.Add(0);
-            Triangles.Add(1);
-            Triangles.Add(2);
-            Triangles.Add(3);
-
+            Triangles.Add(i);
+            Triangles.Add(i + 1);
+            Triangles.Add(i + 2);
+            Triangles.Add(i + 3);
+            Triangles.Add(i + 4);
+            Triangles.Add(i + 5);
+            i = i + 6;
             MeshGeometry3D tmesh = new MeshGeometry3D();
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
-            tmesh.Normals.Add(new Vector3D(x, y, -1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + 1) * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[x + ((y + 1) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[(x + 1) + (y * 320)]) - (this.Depth[(x + 1) + ((y + 1) * 320)]), (this.Depth[x + ((y + 1) * 320)]) - (this.Depth[(x + 1) + ((y + 1) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + 1) + (y * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[(x + 1) + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + 1) + (y * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[(x + 1) + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + ((y + 1) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + 1) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + 1) * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[x + ((y + 1) * 320)]), 1));
 
             GeometryModel3D msheet = new GeometryModel3D();
             msheet.Geometry = tmesh;
@@ -491,7 +223,6 @@ namespace kinectScan
         {
             short[] pixelData = new short[imageFrame.PixelDataLength];
             imageFrame.CopyPixelDataTo(pixelData);
-
             BitmapSource bmap = BitmapSource.Create(
              imageFrame.Width,
              imageFrame.Height,
@@ -505,28 +236,14 @@ namespace kinectScan
 
         private void Begin_Scan_Click(object sender, RoutedEventArgs e)
         {
-
+            return;
         }
-
-        /// <summary>
-        /// Show exception info on status bar
-        /// </summary>
-        /// <param name="message">Message to show on status bar</param>
-        private void ShowStatusMessage(string message)
-        {
-            this.Dispatcher.BeginInvoke((Action)(() =>
-            {
-                this.ResetFps();
-                this.statusBarText.Content = message;
-            }));
-        }
-
-        private void Export_Model_Click(object sender, RoutedEventArgs e)
+        private void test_Click(object sender, RoutedEventArgs e)
         {
             return;
         }
 
-        private void test_Click(object sender, RoutedEventArgs e)
+        private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
             return;
         }
