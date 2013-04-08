@@ -35,6 +35,7 @@ namespace kinectScan
         GeometryModel3D[] points = new GeometryModel3D[320 * 240];
         public int[] Depth = new int[320 * 240];
         Model3DGroup modelGroup = new Model3DGroup();
+        public int s=2;
 
         //int s = 2;
 
@@ -79,11 +80,11 @@ namespace kinectScan
                 //Model3DGroup modelGroup = new Model3DGroup();
 
                 int i = 0;
-                for (int y = 0; y < 239; y++)
+                for (int y = 0; y < 238; y=y+s)
                 {
-                    for (int x = 0; x < 319; x++)
+                    for (int x = 0; x < 318; x=x+s)
                     {
-                        points[i] = Triangle(x, y);
+                        points[i] = Triangle(x, y, s);
                         points[i].Transform = new TranslateTransform3D(0, 0, 0);
                         this.modelGroup.Children.Add(points[i]);
                         i++;
@@ -165,9 +166,9 @@ namespace kinectScan
 
                 int i = 0;
 
-                for (int y = 0; y < 239; y++)
+                for (int y = 0; y < 238; y=y+s)
                 {
-                    for (int x = 0; x < 319; x++)
+                    for (int x = 0; x < 318; x=x+s)
                     {
                         this.Depth[x + y * 320] = ((ushort)pixelData[x + y * 320]) >> 3;
                         //filter depth
@@ -182,18 +183,18 @@ namespace kinectScan
             }
         }
 
-        private GeometryModel3D Triangle(int x, int y)
+        private GeometryModel3D Triangle(int x, int y, int s)
         {
 
             int i = 0;
             Point3DCollection corners = new Point3DCollection();
 
-            corners.Add(new Point3D(x, y + 1, this.Depth[x + ((y + 1) * 320)]));
-            corners.Add(new Point3D(x + 1, y + 1, this.Depth[(x + 1) + ((y + 1) * 320)]));
-            corners.Add(new Point3D(x + 1, y, this.Depth[(x + 1) + (y * 320)]));
-            corners.Add(new Point3D(x + 1, y, this.Depth[(x + 1) + (y * 320)]));
+            corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
+            corners.Add(new Point3D(x + s, y + s, this.Depth[(x + s) + ((y + s) * 320)]));
+            corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
+            corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
             corners.Add(new Point3D(x, y, this.Depth[x + (y * 320)]));
-            corners.Add(new Point3D(x, y + 1, this.Depth[x + ((y + 1) * 320)]));
+            corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
 
             Int32Collection Triangles = new Int32Collection();
             Triangles.Add(i);
@@ -206,12 +207,12 @@ namespace kinectScan
             MeshGeometry3D tmesh = new MeshGeometry3D();
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
-            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + 1) * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[x + ((y + 1) * 320)]), 1));
-            tmesh.Normals.Add(new Vector3D((this.Depth[(x + 1) + (y * 320)]) - (this.Depth[(x + 1) + ((y + 1) * 320)]), (this.Depth[x + ((y + 1) * 320)]) - (this.Depth[(x + 1) + ((y + 1) * 320)]), 1));
-            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + 1) + (y * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[(x + 1) + (y * 320)]), 1));
-            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + 1) + (y * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[(x + 1) + (y * 320)]), 1));
-            tmesh.Normals.Add(new Vector3D((this.Depth[x + ((y + 1) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + 1) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
-            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + 1) * 320)]), (this.Depth[(x + 1) + ((y + 1) * 320)]) - (this.Depth[x + ((y + 1) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[(x + s) + (y * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), (this.Depth[x + ((y + s) * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + ((y + s) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + s) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
 
             GeometryModel3D msheet = new GeometryModel3D();
             msheet.Geometry = tmesh;
