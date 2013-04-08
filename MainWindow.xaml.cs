@@ -15,6 +15,8 @@ namespace kinectScan
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
 
+    using HelixToolkit.Wpf;
+
     using Microsoft.Kinect;
     //using Microsoft.Kinect.Toolkit;
     //using Microsoft.Kinect.Toolkit.Fusion;
@@ -76,9 +78,7 @@ namespace kinectScan
                 Camera1.Position = new Point3D(160, 120, -1000);
                 Camera1.LookDirection = new Vector3D(0, 0, 1);
                 Camera1.UpDirection = new Vector3D(0, -1, 0);
-
-                //Model3DGroup modelGroup = new Model3DGroup();
-
+                
                 int i = 0;
                 for (int y = 0; y < 238; y=y+s)
                 {
@@ -172,7 +172,7 @@ namespace kinectScan
                     {
                         this.Depth[x + y * 320] = ((ushort)pixelData[x + y * 320]) >> 3;
                         //filter depth
-                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : -1001);
+                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : (ushort)maxDepth);
                         ((TranslateTransform3D)points[i].Transform).OffsetZ = this.Depth[x + y * 320];
                         i++;
 
@@ -246,7 +246,15 @@ namespace kinectScan
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            return;
+            string fileName = "model.obj";
+        
+            using (var exporter = new ObjExporter(fileName))
+            {
+                exporter.Export(this.modelGroup);
+            }
+
+            Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
+        
         }
     }
 }
