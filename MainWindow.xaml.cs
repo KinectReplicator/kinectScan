@@ -74,6 +74,13 @@
             {
                 //Start the depth stream
                 this.sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
+                this.sensor.ColorStream.Enable(ColorImageFormat.InfraredResolution640x480Fps30);
+
+                // Allocate space to put the pixels we'll receive
+                this.colorPixels = new byte[this.sensor.ColorStream.FramePixelDataLength];
+
+                // This is the bitmap we'll display on-screen
+                this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
 
                 // Defines the camera used to view the 3D object. In order to view the 3D object,
                 // the camera must be positioned and pointed such that the object is within view 
@@ -217,9 +224,11 @@
                     this.colorBitmap.WritePixels(
                         new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight),
                         this.colorPixels,
-                        this.colorBitmap.PixelWidth * sizeof(int),
+                        this.colorBitmap.PixelWidth * colorFrame.BytesPerPixel,
                         0);
                 }
+
+                this.KinectRGBView.Source = this.colorBitmap;
 
             }
         }

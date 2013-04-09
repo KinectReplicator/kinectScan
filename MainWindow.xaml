@@ -45,7 +45,7 @@
             
             <!-- Bilateral Camera-->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0" />
-            <Image Name="KinectFilterView" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0"/>
+            <Image Name="KinectRGBView" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0"/>
 
             <!-- Reconstruction Model -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="3" Height="480" Width="640" Margin="30,0,30,30" />
@@ -53,7 +53,7 @@
 
             <!-- Titles -->
             <Label x:Name="IR_Title" Content="IR DEPTH CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Bilateral_Title" Content="BILATERAL IMAGE"  Grid.Row="1" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Top"/>
+            <Label x:Name="RGB_Title" Content="RGB CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Top"/>
             <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom"/>
             <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Grid.RowSpan="2"/>
 
