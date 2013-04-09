@@ -13,7 +13,7 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
 
-    using HelixToolkit.Wpf;
+    //using HelixToolkit.Wpf;
 
     using Microsoft.Kinect;
     //using Microsoft.Kinect.Toolkit;
@@ -35,17 +35,22 @@
         /// 
 
         // Declare scene objects.
-        Viewport3D myViewport3D = new Viewport3D();
-        Model3DGroup myModel3DGroup = new Model3DGroup();
-        GeometryModel3D myGeometryModel = new GeometryModel3D();
-        ModelVisual3D myModelVisual3D = new ModelVisual3D();
-        MeshGeometry3D myMeshGeometry3D = new MeshGeometry3D();
-        Vector3DCollection myNormalCollection = new Vector3DCollection();
-        Point3DCollection myPositionCollection = new Point3DCollection();
-        Int32Collection myTriangleIndicesCollection = new Int32Collection();
-
+        //GeometryModel3D[] points = new GeometryModel3D[320 * 240];
+        //Viewport3D myViewport3D = new Viewport3D();
+        //Model3DGroup myModel3DGroup = new Model3DGroup();
+        //GeometryModel3D myGeometryModel = new GeometryModel3D();
+        //ModelVisual3D myModelVisual3D = new ModelVisual3D();
+        //MeshGeometry3D myMeshGeometry3D = new MeshGeometry3D();
+        //Vector3DCollection myNormalCollection = new Vector3DCollection();
+        //Point3DCollection myPositionCollection = new Point3DCollection();
+        //Int32Collection myTriangleIndicesCollection = new Int32Collection();
+        
+        GeometryModel3D[] points = new GeometryModel3D[2*(320 * 240)];
         public int[] Depth = new int[320 * 240];
-        public int s = 2;
+        Model3DGroup modelGroup = new Model3DGroup();
+        public int s=4;
+        public int Top_or_bottom = 0;
+
         public byte[] colorPixels;
         public WriteableBitmap colorBitmap;
 
@@ -82,91 +87,108 @@
                 // This is the bitmap we'll display on-screen
                 this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
 
-                // Defines the camera used to view the 3D object. In order to view the 3D object,
-                // the camera must be positioned and pointed such that the object is within view 
-                // of the camera.
-                PerspectiveCamera myPCamera = new PerspectiveCamera();
+                DirectionalLight DirLight1 = new DirectionalLight();
+                DirLight1.Color = Colors.White;
+                DirLight1.Direction = new Vector3D(1, 1, 1);
 
-                // Specify where in the 3D scene the camera is.
-                myPCamera.Position = new Point3D(160, 120, -1000);
+                PerspectiveCamera Camera1 = new PerspectiveCamera();
+                Camera1.FarPlaneDistance = 8000;
+                Camera1.NearPlaneDistance = 100;
+                Camera1.FieldOfView = 10;
+                Camera1.Position = new Point3D(160, 120, -1000);
+                Camera1.LookDirection = new Vector3D(0, 0, 1);
+                Camera1.UpDirection = new Vector3D(0, -1, 0);
+                
 
-                // Specify the direction that the camera is pointing.
-                myPCamera.LookDirection = new Vector3D(0, 0, 1);
+                //// Defines the camera used to view the 3D object. In order to view the 3D object,
+                //// the camera must be positioned and pointed such that the object is within view 
+                //// of the camera.
+                //PerspectiveCamera myPCamera = new PerspectiveCamera();
 
-                // Define camera's horizontal field of view in degrees.
-                myPCamera.FieldOfView = 100;
+                //// Specify where in the 3D scene the camera is.
+                //myPCamera.Position = new Point3D(160, 120, -1000);
 
-                // Asign the camera to the viewport
-                myViewport3D.Camera = myPCamera;
-                // Define the lights cast in the scene. Without light, the 3D object cannot 
-                // be seen. Note: to illuminate an object from additional directions, create 
-                // additional lights.
-                DirectionalLight myDirectionalLight = new DirectionalLight();
-                myDirectionalLight.Color = Colors.White;
-                myDirectionalLight.Direction = new Vector3D(1, 1, 1);
+                //// Specify the direction that the camera is pointing.
+                //myPCamera.LookDirection = new Vector3D(0, 0, 1);
+
+                //// Define camera's horizontal field of view in degrees.
+                //myPCamera.FieldOfView = 100;
+
+                //// Asign the camera to the viewport
+                //myViewport3D.Camera = myPCamera;
+                //// Define the lights cast in the scene. Without light, the 3D object cannot 
+                //// be seen. Note: to illuminate an object from additional directions, create 
+                //// additional lights.
+                //DirectionalLight myDirectionalLight = new DirectionalLight();
+                //myDirectionalLight.Color = Colors.White;
+                //myDirectionalLight.Direction = new Vector3D(1, 1, 1);
 
                 int i = 0;
-                for (int y = 0; y < 238; y = y + s)
+                for (int y = s; y < (240-s); y = y + s)
                 {
-                    for (int x = 0; x < 318; x = x + s)
+                    for (int x = s; x < (320-s); x = x + s)
                     {
-                        i = 0;
 
-                        myPositionCollection.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
-                        myPositionCollection.Add(new Point3D(x + s, y + s, this.Depth[(x + s) + ((y + s) * 320)]));
-                        myPositionCollection.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
-                        myPositionCollection.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
-                        myPositionCollection.Add(new Point3D(x, y, this.Depth[x + (y * 320)]));
-                        myPositionCollection.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
+                        points[i] = TopTriangle(x, y, s);
+                        points[i+1] = BottomTriangle(x, y, s);
 
-                        myTriangleIndicesCollection.Add(i);
-                        myTriangleIndicesCollection.Add(i + 1);
-                        myTriangleIndicesCollection.Add(i + 2);
-                        myTriangleIndicesCollection.Add(i + 3);
-                        myTriangleIndicesCollection.Add(i + 4);
-                        myTriangleIndicesCollection.Add(i + 5);
-                        i = i + 6;
+                        int Top_X =((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)])+(this.Depth[(x + s) + (y * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)])+(this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]))/3;
+                        int Top_Y=((this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)])+(this.Depth[x + ((y + s) * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)])+(this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]))/3;
+                        points[i].Transform = new TranslateTransform3D(Top_X, Top_Y, 1);
 
-                        myNormalCollection.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
-                        myNormalCollection.Add(new Vector3D((this.Depth[(x + s) + (y * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), (this.Depth[x + ((y + s) * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), 1));
-                        myNormalCollection.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
-                        myNormalCollection.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
-                        myNormalCollection.Add(new Vector3D((this.Depth[x + ((y + s) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + s) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
-                        myNormalCollection.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
-                    }
+                        int Bot_X=((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)])+ (this.Depth[x + ((y + s) * 320)]) - (this.Depth[x + (y * 320)])+ (this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]))/3;
+                        int Bot_Y=((this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)])+(this.Depth[(x + s) + (y * 320)]) - (this.Depth[x + (y * 320)])+(this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]) )/3;
+                        points[i+1].Transform = new TranslateTransform3D(Bot_X, Bot_Y, 1);
+                        
+                        this.modelGroup.Children.Add(points[i]);
+                        this.modelGroup.Children.Add(points[i+1]);
+                        i=i+2;
+
+                       }
                 }
 
-                myMeshGeometry3D.Normals = myNormalCollection;
-                myMeshGeometry3D.Positions = myPositionCollection;
-                myMeshGeometry3D.TriangleIndices = myTriangleIndicesCollection;
+                this.modelGroup.Children.Add(DirLight1);
+                ModelVisual3D modelsVisual = new ModelVisual3D();
+                modelsVisual.Content = this.modelGroup;
+                Viewport3D myViewport = new Viewport3D();
+                myViewport.IsHitTestVisible = false;
+                myViewport.Camera = Camera1;
+                myViewport.Children.Add(modelsVisual);
+                KinectNormalView.Children.Add(myViewport);
 
-                myGeometryModel.Geometry = myMeshGeometry3D;
 
-                myGeometryModel.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
 
-                myModel3DGroup.Children.Add(myGeometryModel);
-                myModel3DGroup.Children.Add(myDirectionalLight);
-                myModelVisual3D.Content = myModel3DGroup;
+                //myMeshGeometry3D.Normals = myNormalCollection;
+                //myMeshGeometry3D.Positions = myPositionCollection;
+                //myMeshGeometry3D.TriangleIndices = myTriangleIndicesCollection;
 
-                LinearGradientBrush myHorizontalGradient = new LinearGradientBrush();
-                myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Yellow, 0.0));
-                myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Red, 0.25));
-                myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Blue, 0.75));
-                myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.LimeGreen, 1.0));
+                //myGeometryModel.Geometry = myMeshGeometry3D;
 
-                // Define material and apply to the mesh geometries.
-                DiffuseMaterial myMaterial = new DiffuseMaterial(myHorizontalGradient);
-                myGeometryModel.Material = myMaterial;
+                //myGeometryModel.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
 
-                myViewport3D.IsHitTestVisible = false;
-                myViewport3D.Children.Add(myModelVisual3D);
-                KinectNormalView.Children.Add(myViewport3D);
+                //myModel3DGroup.Children.Add(myGeometryModel);
+                //myModel3DGroup.Children.Add(myDirectionalLight);
+                //myModelVisual3D.Content = myModel3DGroup;
+
+                //LinearGradientBrush myHorizontalGradient = new LinearGradientBrush();
+                //myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Yellow, 0.0));
+                //myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Red, 0.25));
+                //myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.Blue, 0.75));
+                //myHorizontalGradient.GradientStops.Add(new GradientStop(Colors.LimeGreen, 1.0));
+
+                //// Define material and apply to the mesh geometries.
+                //DiffuseMaterial myMaterial = new DiffuseMaterial(myHorizontalGradient);
+                //myGeometryModel.Material = myMaterial;
+
+                //myViewport3D.IsHitTestVisible = false;
+                //myViewport3D.Children.Add(myModelVisual3D);
+                //KinectNormalView.Children.Add(myViewport3D);
 
                 //this.test_text.Text = this.modelGroup.ToString();
-                myViewport3D.Height = KinectNormalView.Height;
-                myViewport3D.Width = KinectNormalView.Width;
-                Canvas.SetTop(myViewport3D, 0);
-                Canvas.SetLeft(myViewport3D, 0);
+                myViewport.Height = KinectNormalView.Height;
+                myViewport.Width = KinectNormalView.Width;
+                Canvas.SetTop(myViewport, 0);
+                Canvas.SetLeft(myViewport, 0);
 
                 // Add an event handler to be called whenever there is new depth frame data available
                 this.sensor.DepthFrameReady += this.SensorDepthFrameReady;
@@ -255,14 +277,16 @@
 
                 int i = 0;
 
-                for (int y = 0; y < 238; y = y + s)
+                for (int y = s; y < (240-s); y = y + s)
                 {
-                    for (int x = 0; x < 318; x = x + s)
+                    for (int x = s; x < (320-s); x = x + s)
                     {
                         this.Depth[x + y * 320] = ((ushort)pixelData[x + y * 320]) >> 3;
                         //filter depth
-                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : -1001);
-                        i++;
+                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : (ushort)maxDepth);
+                        ((TranslateTransform3D)points[i].Transform).OffsetZ = ((this.Depth[x + ((y+s) * 320)]) + (this.Depth[(x+s) + ((y+s) * 320)])+(this.Depth[(x+s) + (y * 320)]))/3;
+                        ((TranslateTransform3D)points[i + 1].Transform).OffsetZ = ((this.Depth[(x+s) + (y * 320)]) + (this.Depth[x  + (y  * 320)]) + (this.Depth[x  + ((y+s) * 320)]))/3;
+                        i=i+2;
 
                     }
                 }
@@ -270,6 +294,61 @@
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }
         }
+       
+        private GeometryModel3D TopTriangle(int x, int y, int s)
+        {
+            int i = 0;
+            Point3DCollection corners = new Point3DCollection();
+            corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
+            corners.Add(new Point3D(x + s, y + s, this.Depth[(x + s) + ((y + s) * 320)]));
+            corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
+            
+            Int32Collection Triangles = new Int32Collection();
+            Triangles.Add(i);
+            Triangles.Add(i + 1);
+            Triangles.Add(i + 2);
+            i = i + 3;
+
+            MeshGeometry3D tmesh = new MeshGeometry3D();
+            tmesh.Positions = corners;
+            tmesh.TriangleIndices = Triangles;
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[(x + s) + (y * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), (this.Depth[x + ((y + s) * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
+
+            GeometryModel3D msheet = new GeometryModel3D();
+            msheet.Geometry = tmesh;
+            msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
+            return msheet;
+        }
+
+        private GeometryModel3D BottomTriangle(int x, int y, int s)
+        {
+            int i = 0;
+            Point3DCollection corners = new Point3DCollection();
+            corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
+            corners.Add(new Point3D(x, y, this.Depth[x + (y * 320)]));
+            corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
+
+            Int32Collection Triangles = new Int32Collection();
+            Triangles.Add(i);
+            Triangles.Add(i + 1);
+            Triangles.Add(i + 2);
+            i = i + 3;
+
+            MeshGeometry3D tmesh = new MeshGeometry3D();
+            tmesh.Positions = corners;
+            tmesh.TriangleIndices = Triangles;
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + ((y + s) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + s) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
+            tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
+
+            GeometryModel3D msheet = new GeometryModel3D();
+            msheet.Geometry = tmesh;
+            msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
+            return msheet;
+        }
+
 
         BitmapSource DepthToBitmapSource(DepthImageFrame imageFrame)
         {
@@ -297,14 +376,14 @@
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            string fileName = "model.obj";
+            //string fileName = "model.obj";
+            return;
+            //using (var exporter = new ObjExporter(fileName))
+            //{
+            //    exporter.Export(this.myModel3DGroup);
+            //}
 
-            using (var exporter = new ObjExporter(fileName))
-            {
-                exporter.Export(this.myModel3DGroup);
-            }
-
-            Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
+            //Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
 
         }
     }
