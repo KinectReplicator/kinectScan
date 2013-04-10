@@ -13,7 +13,7 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
 
-    //using HelixToolkit.Wpf;
+    using HelixToolkit.Wpf;
 
     using Microsoft.Kinect;
     //using Microsoft.Kinect.Toolkit;
@@ -376,14 +376,16 @@
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            //string fileName = "model.obj";
-            return;
-            //using (var exporter = new ObjExporter(fileName))
-            //{
-            //    exporter.Export(this.myModel3DGroup);
-            //}
+            //return;
+            
+            string fileName = "model.obj";
+            
+            using (var exporter = new ObjExporter(fileName))
+            {
+                exporter.Export(this.modelGroup);
+            }
 
-            //Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
+            Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
 
         }
     }
