@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:kinectScan"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="kinectScan.MainWindow"
+        xmlns:tk="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
         Title="kinectScan" Height="870" Width="1028" Loaded="WindowLoaded" Closing="WindowClosing" Top="0" Left="0" Icon="Images/Kinect.ico">
 
     <Window.Resources>
@@ -119,10 +120,12 @@
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
             </Button>
+            <TextBox HorizontalAlignment="Left" Name="statusBarTextBlock" Height="23" Margin="30,15,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
             <!-- <TextBox Name="test_text" HorizontalAlignment="Left" Height="109" Margin="42,124,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="209"/> -->
         </Grid>
         <Button Content="CAPTURE MODEL" Name="test" Grid.Column="2" HorizontalAlignment="Left" Margin="30,0,0,100" VerticalAlignment="Bottom" Style="{StaticResource KinectButton}" Click="test_Click"/>
         <!--MenuArea-->
+        <tk:KinectSensorChooserUI Name="sensorChooserUI" HorizontalAlignment="Center" Margin="330,0,330,5"/>
     </Grid>
     <!--LayoutGrid-->
 
