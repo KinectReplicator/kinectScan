@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>HelixToolkit</id>
+    <version>2013.1.10.1</version>
+    <title>Helix 3D Toolkit</title>
+    <authors>objo</authors>
+    <owners>objo</owners>
+    <licenseUrl>http://helixtoolkit.codeplex.com/license</licenseUrl>
+    <projectUrl>http://helixtoolkit.codeplex.com/</projectUrl>
+    <iconUrl>http://www.objo.net/codeplex/icons/helixtoolkit.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Helix 3D Toolkit is a collection of custom controls and helper classes for WPF 3D. The toolkit contains controls that makes it easy to control the camera, import models (3ds,lwo,obj) and export models from WPF.</description>
+    <tags>wpf wpf3d 3d</tags>
+    <references>
+      <reference file="HelixToolkit.Wpf.dll" />
+    </references>
+  </metadata>
+</package>
