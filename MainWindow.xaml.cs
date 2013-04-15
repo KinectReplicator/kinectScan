@@ -269,46 +269,49 @@
             Camera1.Position = new Point3D(0, 4, 30);
             Camera1.LookDirection = new Vector3D(0, 0, -1);
             Camera1.UpDirection = new Vector3D(0, -1, 0);
+
             corners.Add(new Point3D(-5, -5, -1));
             corners.Add(new Point3D(5, -5, -1));
             corners.Add(new Point3D(5, 5, -1));
+            corners.Add(new Point3D(5, 5, -1));
             corners.Add(new Point3D(-5, 5, -1));
+            corners.Add(new Point3D(-5, -5, -1));
 
 
             corners.Add(new Point3D(5, -5, -1));
             corners.Add(new Point3D(5, -5, -11));
-            //corners.Add(new Point3D(5, 5, -11));
             corners.Add(new Point3D(5, 5, -11));
             corners.Add(new Point3D(5, 5, -11));
-            // corners.Add(new Point3D(5, 5, -1));
+            corners.Add(new Point3D(5, 5, -1));
+            corners.Add(new Point3D(5, -5, -1));
 
             corners.Add(new Point3D(5, -5, -11));
             corners.Add(new Point3D(-5, -5, -11));
-            // corners.Add(new Point3D(-5, 5, -11));
+            corners.Add(new Point3D(-5, 5, -11));
             corners.Add(new Point3D(-5, 5, -11));
             corners.Add(new Point3D(5, 5, -11));
-            // corners.Add(new Point3D(5, -5, -11));
+            corners.Add(new Point3D(5, -5, -11));
 
             corners.Add(new Point3D(-5, -5, -11));
             corners.Add(new Point3D(5, -5, -11));
-            //corners.Add(new Point3D(5, -5, -1));
+            corners.Add(new Point3D(5, -5, -1));
             corners.Add(new Point3D(5, -5, -1));
             corners.Add(new Point3D(-5, -5, -1));
-            // corners.Add(new Point3D(-5, -5, -11));
+            corners.Add(new Point3D(-5, -5, -11));
 
             corners.Add(new Point3D(-5, -5, -11));
             corners.Add(new Point3D(-5, -5, -1));
-            // corners.Add(new Point3D(-5, 5, -1));
+            corners.Add(new Point3D(-5, 5, -1));
             corners.Add(new Point3D(-5, 5, -1));
             corners.Add(new Point3D(-5, 5, -11));
-            //corners.Add(new Point3D(-5, -5, -11));
+            corners.Add(new Point3D(-5, -5, -11));
 
             corners.Add(new Point3D(5, 5, -11));
             corners.Add(new Point3D(-5, 5, -11));
-            // corners.Add(new Point3D(-5, 5, -1));
+            corners.Add(new Point3D(-5, 5, -1));
             corners.Add(new Point3D(-5, 5, -1));
             corners.Add(new Point3D(5, 5, -1));
-            // corners.Add(new Point3D(5, 5, -11));
+            corners.Add(new Point3D(5, 5, -11));
             Triangles.Add(0);
             Triangles.Add(1);
             Triangles.Add(2);
@@ -333,7 +336,7 @@
             Triangles.Add(21);
             Triangles.Add(22);
             Triangles.Add(23);
-           /* Triangles.Add(24);
+            Triangles.Add(24);
             Triangles.Add(25);
             Triangles.Add(26);
             Triangles.Add(27);
@@ -344,7 +347,7 @@
             Triangles.Add(32);
             Triangles.Add(33);
             Triangles.Add(34);
-            Triangles.Add(35); */
+            Triangles.Add(35);
             myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
@@ -369,7 +372,7 @@
             myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            /*myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
+            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
@@ -380,7 +383,7 @@
             myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
             myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0)); */
+            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
@@ -405,7 +408,6 @@
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
-           /* Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
@@ -416,7 +418,8 @@
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1)); */
+            Normals.Add(new Vector3D(0, 0, 1));
+            Normals.Add(new Vector3D(0, 0, 1));
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
             tmesh.Normals = Normals;
