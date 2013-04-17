@@ -352,7 +352,6 @@
                 imageFrame.CopyPixelDataTo(pixelData);
 
                 // Get the min and max reliable depth for the current frame
-
                 //double minDepth = Near_Filter_Slider.Value / 100;
                 //double maxDepth = Far_Filter_Slider.Value / 100;
                 double minDepth = 0;
