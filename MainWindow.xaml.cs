@@ -272,160 +272,6 @@
             Camera1.NearPlaneDistance = 100;
             //corners.Add(new Point3D(-5, -5, -1));
 
-           
-            /*corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, -5, -1));
-
-
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, -5, -11));
-
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(-5, -5, -11));
-
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, -5, -11));
-
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, 5, -11));
-            Triangles.Add(0);
-            Triangles.Add(1);
-            Triangles.Add(2);
-            Triangles.Add(3);
-            Triangles.Add(4);
-            Triangles.Add(5);
-            Triangles.Add(6);
-            Triangles.Add(7);
-            Triangles.Add(8);
-            Triangles.Add(9);
-            Triangles.Add(10);
-            Triangles.Add(11);
-            Triangles.Add(12);
-            Triangles.Add(13);
-            Triangles.Add(14);
-            Triangles.Add(15);
-            Triangles.Add(16);
-            Triangles.Add(17);
-            Triangles.Add(18);
-            Triangles.Add(19);
-            Triangles.Add(20);
-            Triangles.Add(21);
-            Triangles.Add(22);
-            Triangles.Add(23);
-            Triangles.Add(24);
-            Triangles.Add(25);
-            Triangles.Add(26);
-            Triangles.Add(27);
-            Triangles.Add(28);
-            Triangles.Add(29);
-            Triangles.Add(30);
-            Triangles.Add(31);
-            Triangles.Add(32);
-            Triangles.Add(33);
-            Triangles.Add(34);
-            Triangles.Add(35);
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1)); */
-
-
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
             tmesh.Normals = Normals;
@@ -509,10 +355,8 @@
                 imageFrame.CopyPixelDataTo(pixelData);
 
                 // Get the min and max reliable depth for the current frame
-                //double minDepth = Near_Filter_Slider.Value;
-                //double maxDepth = Far_Filter_Slider.Value;
-                double minDepth = 0;
-                double maxDepth = 500;
+                double minDepth = (Near_Filter_Slider.Value)/100;
+                double maxDepth = (Far_Filter_Slider.Value)/100;
                 for (int y = 0; y < 240; y++)
                 {
                     for (int x = 0; x < 320; x++)
@@ -528,9 +372,10 @@
                  {
                      for (int x = 0; x < (320 - s); x = x + s)
                      {
-                         if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth)
+
+                         if (this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth && this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth)
                          {
-                             if (this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth && this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth)
+                             if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
                              {
 
                                  int depth1 = this.Depth[x + ((y + s) * 320)];
@@ -551,30 +396,70 @@
                                  Normals.Add(Vector3D.CrossProduct(v1, v3));
                                  Normals.Add(Vector3D.CrossProduct(v1, v2));
                                  Normals.Add(Vector3D.CrossProduct(v2, v3));
-                                 if (this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
-                                 {
-                                     int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
-                                     Point3D p4 = new Point3D((x + s), (y + s), depth4);
-                                     corners.Add(p3);
-                                     corners.Add(p4);
-                                     corners.Add(p1);
-                                     Triangles.Add(i + 3);
-                                     Triangles.Add(i + 4);
-                                     Triangles.Add(i + 5);
-                                     Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
-                                     Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
-                                     Normals.Add(Vector3D.CrossProduct(v2, v3));
-                                     Normals.Add(Vector3D.CrossProduct(v4, v5));
-                                     Normals.Add(Vector3D.CrossProduct(v1, v3));
-                                     i = i + 6;
-                                 }
-                                 else
-                                 {
-                                     i = i + 3;
-                                 }
 
+                                 int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
+                                 Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                                 corners.Add(p3);
+                                 corners.Add(p4);
+                                 corners.Add(p1);
+                                 Triangles.Add(i + 3);
+                                 Triangles.Add(i + 4);
+                                 Triangles.Add(i + 5);
+                                 Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
+                                 Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v4, v5));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 i = i + 6;
                              }
-
+                             else if (this.Depth[x + (y * 320)] <= minDepth && this.Depth[x + (y * 320)] >= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
+                             {
+                                 int depth1 = this.Depth[x + ((y + s) * 320)];
+                                 int depth3 = this.Depth[(x + s) + (y * 320)];
+                                 int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
+                                 Point3D p1 = new Point3D(x, (y + s), depth1);
+                                 Point3D p3 = new Point3D((x + s), y, depth3);
+                                 Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                                 corners.Add(p3);
+                                 corners.Add(p4);
+                                 corners.Add(p1);
+                                 Triangles.Add(i + 3);
+                                 Triangles.Add(i + 4);
+                                 Triangles.Add(i + 5);
+                                 int depth2 = this.Depth[x + (y * 320)];
+                                 Point3D p2 = new Point3D(x, y, depth2);
+                                 Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                                 Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
+                                 Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+                                 Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
+                                 Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v4, v5));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 i = i + 3;
+                             }
+                             else if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] <= minDepth && this.Depth[(x + s) + ((y + s) * 320)] >= maxDepth)
+                             {
+                                 int depth1 = this.Depth[x + ((y + s) * 320)];
+                                 int depth2 = this.Depth[x + (y * 320)];
+                                 int depth3 = this.Depth[(x + s) + (y * 320)];
+                                 Point3D p1 = new Point3D(x, (y + s), depth1);
+                                 Point3D p2 = new Point3D(x, y, depth2);
+                                 Point3D p3 = new Point3D((x + s), y, depth3);
+                                 corners.Add(p1);
+                                 corners.Add(p2);
+                                 corners.Add(p3);
+                                 Triangles.Add(i);
+                                 Triangles.Add(i + 1);
+                                 Triangles.Add(i + 2);
+                                 Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                                 Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
+                                 Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v2));
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 i = i + 3;
+                             }
                          }
 
                      }
