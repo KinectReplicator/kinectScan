@@ -258,8 +258,6 @@
             //// This is the bitmap we'll display on-screen
             this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
 
-
-
             DirectionalLight DirLight1 = new DirectionalLight();
             DirLight1.Color = Colors.White;
             DirLight1.Direction = new Vector3D(-0.61, -0.5, -0.61);
@@ -270,161 +268,6 @@
             //Camera1.UpDirection = new Vector3D(0, -1, 0);
             Camera1.FarPlaneDistance = 8000;
             Camera1.NearPlaneDistance = 100;
-            //corners.Add(new Point3D(-5, -5, -1));
-
-           
-            /*corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, -5, -1));
-
-
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(5, -5, -11));
-
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(5, -5, -11));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(5, -5, -1));
-            corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(-5, -5, -11));
-
-            corners.Add(new Point3D(-5, -5, -11));
-            corners.Add(new Point3D(-5, -5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, -5, -11));
-
-            corners.Add(new Point3D(5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -11));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(-5, 5, -1));
-            corners.Add(new Point3D(5, 5, -1));
-            corners.Add(new Point3D(5, 5, -11));
-            Triangles.Add(0);
-            Triangles.Add(1);
-            Triangles.Add(2);
-            Triangles.Add(3);
-            Triangles.Add(4);
-            Triangles.Add(5);
-            Triangles.Add(6);
-            Triangles.Add(7);
-            Triangles.Add(8);
-            Triangles.Add(9);
-            Triangles.Add(10);
-            Triangles.Add(11);
-            Triangles.Add(12);
-            Triangles.Add(13);
-            Triangles.Add(14);
-            Triangles.Add(15);
-            Triangles.Add(16);
-            Triangles.Add(17);
-            Triangles.Add(18);
-            Triangles.Add(19);
-            Triangles.Add(20);
-            Triangles.Add(21);
-            Triangles.Add(22);
-            Triangles.Add(23);
-            Triangles.Add(24);
-            Triangles.Add(25);
-            Triangles.Add(26);
-            Triangles.Add(27);
-            Triangles.Add(28);
-            Triangles.Add(29);
-            Triangles.Add(30);
-            Triangles.Add(31);
-            Triangles.Add(32);
-            Triangles.Add(33);
-            Triangles.Add(34);
-            Triangles.Add(35);
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 0));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(0, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 1));
-            myTextureCoordinatesCollection.Add(new System.Windows.Point(1, 0));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1));
-            Normals.Add(new Vector3D(0, 0, 1)); */
-
 
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
@@ -509,10 +352,10 @@
                 imageFrame.CopyPixelDataTo(pixelData);
 
                 // Get the min and max reliable depth for the current frame
-                //double minDepth = Near_Filter_Slider.Value;
-                //double maxDepth = Far_Filter_Slider.Value;
+                //double minDepth = Near_Filter_Slider.Value / 100;
+                //double maxDepth = Far_Filter_Slider.Value / 100;
                 double minDepth = 0;
-                double maxDepth = 500;
+                double maxDepth = 8000;
                 for (int y = 0; y < 240; y++)
                 {
                     for (int x = 0; x < 320; x++)
