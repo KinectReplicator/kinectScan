@@ -352,10 +352,12 @@
                 imageFrame.CopyPixelDataTo(pixelData);
 
                 // Get the min and max reliable depth for the current frame
+
                 //double minDepth = Near_Filter_Slider.Value / 100;
                 //double maxDepth = Far_Filter_Slider.Value / 100;
                 double minDepth = 0;
                 double maxDepth = 8000;
+
                 for (int y = 0; y < 240; y++)
                 {
                     for (int x = 0; x < 320; x++)
@@ -371,9 +373,10 @@
                  {
                      for (int x = 0; x < (320 - s); x = x + s)
                      {
-                         if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth)
+
+                         if (this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth && this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth)
                          {
-                             if (this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth && this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth)
+                             if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
                              {
 
                                  int depth1 = this.Depth[x + ((y + s) * 320)];
@@ -394,30 +397,70 @@
                                  Normals.Add(Vector3D.CrossProduct(v1, v3));
                                  Normals.Add(Vector3D.CrossProduct(v1, v2));
                                  Normals.Add(Vector3D.CrossProduct(v2, v3));
-                                 if (this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
-                                 {
-                                     int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
-                                     Point3D p4 = new Point3D((x + s), (y + s), depth4);
-                                     corners.Add(p3);
-                                     corners.Add(p4);
-                                     corners.Add(p1);
-                                     Triangles.Add(i + 3);
-                                     Triangles.Add(i + 4);
-                                     Triangles.Add(i + 5);
-                                     Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
-                                     Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
-                                     Normals.Add(Vector3D.CrossProduct(v2, v3));
-                                     Normals.Add(Vector3D.CrossProduct(v4, v5));
-                                     Normals.Add(Vector3D.CrossProduct(v1, v3));
-                                     i = i + 6;
-                                 }
-                                 else
-                                 {
-                                     i = i + 3;
-                                 }
 
+                                 int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
+                                 Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                                 corners.Add(p3);
+                                 corners.Add(p4);
+                                 corners.Add(p1);
+                                 Triangles.Add(i + 3);
+                                 Triangles.Add(i + 4);
+                                 Triangles.Add(i + 5);
+                                 Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
+                                 Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v4, v5));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 i = i + 6;
                              }
-
+                             else if (this.Depth[x + (y * 320)] <= minDepth && this.Depth[x + (y * 320)] >= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
+                             {
+                                 int depth1 = this.Depth[x + ((y + s) * 320)];
+                                 int depth3 = this.Depth[(x + s) + (y * 320)];
+                                 int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
+                                 Point3D p1 = new Point3D(x, (y + s), depth1);
+                                 Point3D p3 = new Point3D((x + s), y, depth3);
+                                 Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                                 corners.Add(p3);
+                                 corners.Add(p4);
+                                 corners.Add(p1);
+                                 Triangles.Add(i + 3);
+                                 Triangles.Add(i + 4);
+                                 Triangles.Add(i + 5);
+                                 int depth2 = this.Depth[x + (y * 320)];
+                                 Point3D p2 = new Point3D(x, y, depth2);
+                                 Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                                 Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
+                                 Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+                                 Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
+                                 Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v4, v5));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 i = i + 3;
+                             }
+                             else if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth && this.Depth[(x + s) + ((y + s) * 320)] <= minDepth && this.Depth[(x + s) + ((y + s) * 320)] >= maxDepth)
+                             {
+                                 int depth1 = this.Depth[x + ((y + s) * 320)];
+                                 int depth2 = this.Depth[x + (y * 320)];
+                                 int depth3 = this.Depth[(x + s) + (y * 320)];
+                                 Point3D p1 = new Point3D(x, (y + s), depth1);
+                                 Point3D p2 = new Point3D(x, y, depth2);
+                                 Point3D p3 = new Point3D((x + s), y, depth3);
+                                 corners.Add(p1);
+                                 corners.Add(p2);
+                                 corners.Add(p3);
+                                 Triangles.Add(i);
+                                 Triangles.Add(i + 1);
+                                 Triangles.Add(i + 2);
+                                 Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                                 Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
+                                 Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v2));
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 i = i + 3;
+                             }
                          }
 
                      }
