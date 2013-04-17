@@ -70,7 +70,6 @@
         /// </summary>
         private const ColorImageFormat cFormat = ColorImageFormat.InfraredResolution640x480Fps30;
         
-        //GeometryModel3D[] points = new GeometryModel3D[2*(320 * 240)];
         public int[] Depth = new int[320 * 240];
         Model3DGroup modelGroup = new Model3DGroup();
         public GeometryModel3D msheet = new GeometryModel3D();
@@ -79,8 +78,8 @@
         public MeshGeometry3D tmesh = new MeshGeometry3D();
         public Vector3DCollection Normals = new Vector3DCollection();
         public PointCollection myTextureCoordinatesCollection = new PointCollection();
-
-        public int s = 4;
+        public int samplespot;
+        public int s =8;
 
         public byte[] colorPixels;
         public WriteableBitmap colorBitmap;
@@ -259,18 +258,22 @@
             //// This is the bitmap we'll display on-screen
             this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
 
-           
+
 
             DirectionalLight DirLight1 = new DirectionalLight();
             DirLight1.Color = Colors.White;
             DirLight1.Direction = new Vector3D(-0.61, -0.5, -0.61);
             PerspectiveCamera Camera1 = new PerspectiveCamera();
 
-            Camera1.Position = new Point3D(0, 4, 30);
-            Camera1.LookDirection = new Vector3D(0, 0, -1);
-            Camera1.UpDirection = new Vector3D(0, -1, 0);
+            Camera1.Position = new Point3D(160, 120, -500);
+            Camera1.LookDirection = new Vector3D(0, 0, 1);
+            //Camera1.UpDirection = new Vector3D(0, -1, 0);
+            Camera1.FarPlaneDistance = 8000;
+            Camera1.NearPlaneDistance = 100;
+            //corners.Add(new Point3D(-5, -5, -1));
 
-            corners.Add(new Point3D(-5, -5, -1));
+           
+            /*corners.Add(new Point3D(-5, -5, -1));
             corners.Add(new Point3D(5, -5, -1));
             corners.Add(new Point3D(5, 5, -1));
             corners.Add(new Point3D(5, 5, -1));
@@ -420,6 +423,9 @@
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
             Normals.Add(new Vector3D(0, 0, 1));
+            Normals.Add(new Vector3D(0, 0, 1)); */
+
+
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
             tmesh.Normals = Normals;
@@ -438,11 +444,12 @@
             msheet.Material = myMaterial;
             RotateTransform3D myRotateTransform3D = new RotateTransform3D();
             AxisAngleRotation3D myAxisAngleRotation3d = new AxisAngleRotation3D();
-            myAxisAngleRotation3d.Axis = new Vector3D(3, 3, 0);
-
-            //myAxisAngleRotation3d.Angle = 40;
+            
+            //myAxisAngleRotation3d.Axis = new Vector3D(0, 1, 0);
+            //myAxisAngleRotation3d.Angle = 90;
             //myRotateTransform3D.Rotation = myAxisAngleRotation3d;
             //msheet.Transform = myRotateTransform3D;
+            
             this.modelGroup.Children.Add(msheet);
             this.modelGroup.Children.Add(DirLight1);
             ModelVisual3D modelsVisual = new ModelVisual3D();
@@ -502,85 +509,81 @@
                 imageFrame.CopyPixelDataTo(pixelData);
 
                 // Get the min and max reliable depth for the current frame
-                double minDepth = Near_Filter_Slider.Value;
-                double maxDepth = Far_Filter_Slider.Value;
-
-
-                int i = 0;
-
-                for (int y = s; y < (240-s); y = y + s)
+                //double minDepth = Near_Filter_Slider.Value;
+                //double maxDepth = Far_Filter_Slider.Value;
+                double minDepth = 0;
+                double maxDepth = 500;
+                for (int y = 0; y < 240; y++)
                 {
-                    for (int x = s; x < (320-s); x = x + s)
+                    for (int x = 0; x < 320; x++)
                     {
-                        this.Depth[x + y * 320] = ((ushort)pixelData[x + y * 320]) >> 3;
-                        //filter depth
-                        this.Depth[x + y * 320] = (this.Depth[x + y * 320] >= minDepth && this.Depth[x + y * 320] <= maxDepth ? this.Depth[x + y * 320] : (ushort)maxDepth);
-                        //((TranslateTransform3D)points[i].Transform).OffsetZ = ((this.Depth[x + ((y+s) * 320)]) + (this.Depth[(x+s) + ((y+s) * 320)])+(this.Depth[(x+s) + (y * 320)]))/3;
-                       // ((TranslateTransform3D)points[i + 1].Transform).OffsetZ = ((this.Depth[(x+s) + (y * 320)]) + (this.Depth[x  + (y  * 320)]) + (this.Depth[x  + ((y+s) * 320)]))/3;
-                        i=i+2;
-
+                        //this.Depth[x + (y * 320)] = ((ushort)pixelData[x + y * 320]) >> 3;
+                        Depth[x + (y * 320)] = ((ushort)pixelData[x + y * 320]) / 100;
+                        //this.Depth[x + (y * 320)] = this.Depth[x + (y * 320)] / 10;
                     }
                 }
+                int i = 0;
+                 this.samplespot = Depth[1 + (2 * 320)];
+                 for (int y = 0; y < (240 - s); y = y + s)
+                 {
+                     for (int x = 0; x < (320 - s); x = x + s)
+                     {
+                         if (this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth)
+                         {
+                             if (this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth && this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth)
+                             {
+
+                                 int depth1 = this.Depth[x + ((y + s) * 320)];
+                                 int depth2 = this.Depth[x + (y * 320)];
+                                 int depth3 = this.Depth[(x + s) + (y * 320)];
+                                 Point3D p1 = new Point3D(x, (y + s), depth1);
+                                 Point3D p2 = new Point3D(x, y, depth2);
+                                 Point3D p3 = new Point3D((x + s), y, depth3);
+                                 corners.Add(p1);
+                                 corners.Add(p2);
+                                 corners.Add(p3);
+                                 Triangles.Add(i);
+                                 Triangles.Add(i + 1);
+                                 Triangles.Add(i + 2);
+                                 Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                                 Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
+                                 Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+                                 Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                 Normals.Add(Vector3D.CrossProduct(v1, v2));
+                                 Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                 if (this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
+                                 {
+                                     int depth4 = this.Depth[(x + s) + ((y + s) * 320)];
+                                     Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                                     corners.Add(p3);
+                                     corners.Add(p4);
+                                     corners.Add(p1);
+                                     Triangles.Add(i + 3);
+                                     Triangles.Add(i + 4);
+                                     Triangles.Add(i + 5);
+                                     Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
+                                     Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
+                                     Normals.Add(Vector3D.CrossProduct(v2, v3));
+                                     Normals.Add(Vector3D.CrossProduct(v4, v5));
+                                     Normals.Add(Vector3D.CrossProduct(v1, v3));
+                                     i = i + 6;
+                                 }
+                                 else
+                                 {
+                                     i = i + 3;
+                                 }
+
+                             }
+
+                         }
+
+                     }
+                 }
 
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }
         }
        
-        //////private GeometryModel3D TopTriangle(int x, int y, int s)
-        //////{
-        //////    int i = 0;
-        //////    Point3DCollection corners = new Point3DCollection();
-        //////    corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
-        //////    corners.Add(new Point3D(x + s, y + s, this.Depth[(x + s) + ((y + s) * 320)]));
-        //////    corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
-            
-        //////    Int32Collection Triangles = new Int32Collection();
-        //////    Triangles.Add(i);
-        //////    Triangles.Add(i + 1);
-        //////    Triangles.Add(i + 2);
-        //////    i = i + 3;
-
-        //////    MeshGeometry3D tmesh = new MeshGeometry3D();
-        //////    tmesh.Positions = corners;
-        //////    tmesh.TriangleIndices = Triangles;
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[(x + s) + (y * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), (this.Depth[x + ((y + s) * 320)]) - (this.Depth[(x + s) + ((y + s) * 320)]), 1));
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
-
-        //////    GeometryModel3D msheet = new GeometryModel3D();
-        //////    msheet.Geometry = tmesh;
-        //////    msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
-        //////    return msheet;
-        //////}
-
-        //////private GeometryModel3D BottomTriangle(int x, int y, int s)
-        //////{
-        //////    int i = 0;
-        //////    Point3DCollection corners = new Point3DCollection();
-        //////    corners.Add(new Point3D(x + s, y, this.Depth[(x + s) + (y * 320)]));
-        //////    corners.Add(new Point3D(x, y, this.Depth[x + (y * 320)]));
-        //////    corners.Add(new Point3D(x, y + s, this.Depth[x + ((y + s) * 320)]));
-
-        //////    Int32Collection Triangles = new Int32Collection();
-        //////    Triangles.Add(i);
-        //////    Triangles.Add(i + 1);
-        //////    Triangles.Add(i + 2);
-        //////    i = i + 3;
-
-        //////    MeshGeometry3D tmesh = new MeshGeometry3D();
-        //////    tmesh.Positions = corners;
-        //////    tmesh.TriangleIndices = Triangles;
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[(x + s) + (y * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[(x + s) + (y * 320)]), 1));
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[x + ((y + s) * 320)]) - (this.Depth[x + (y * 320)]), (this.Depth[(x + s) + (y * 320)]) - (this.Depth[x + (y * 320)]), 1));
-        //////    tmesh.Normals.Add(new Vector3D((this.Depth[x + (y * 320)]) - (this.Depth[x + ((y + s) * 320)]), (this.Depth[(x + s) + ((y + s) * 320)]) - (this.Depth[x + ((y + s) * 320)]), 1));
-
-        //////    GeometryModel3D msheet = new GeometryModel3D();
-        //////    msheet.Geometry = tmesh;
-        //////    msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
-        //////    return msheet;
-        //////}
-
-
         BitmapSource DepthToBitmapSource(DepthImageFrame imageFrame)
         {
             short[] pixelData = new short[imageFrame.PixelDataLength];
@@ -615,6 +618,14 @@
             }
 
             Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
+
+            string fileName2 = "depth.txt";
+
+using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName2))
+{
+    file.Write(string.Join(",", this.Depth));
+    //file.Write(samplespot);
+}
 
         }
 
