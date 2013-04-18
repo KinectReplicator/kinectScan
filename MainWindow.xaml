@@ -76,7 +76,7 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="Begin_Scan_Click"/>
-            <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" />
+            <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="End_Scan_Click" />
 
             <!--ModelNameArea-->
             <Grid x:Name="ModelNameArea" Grid.Row="1">
