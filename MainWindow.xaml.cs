@@ -253,9 +253,9 @@
 
             //// This is the bitmap we'll display on-screen
             this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
-           
          }
 
+       
         /// <summary>
         /// Event handler for Kinect sensor's ColorFrameReady event
         /// </summary>
