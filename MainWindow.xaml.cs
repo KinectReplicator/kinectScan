@@ -352,9 +352,9 @@
             int maxDepth = 204;//Far_Filter_Slider.Value;
             
             int i = 0;
-            for (int y = 0; y < (240 - s); y = y + s)
+            for (int y = (int) Y_Min_Slider.Value; y < ((int) Y_Max_Slider.Value - s); y = y + s)
             {
-                for (int x = 0; x < (320 - s); x = x + s)
+                for (int x = (int) X_Min_Slider.Value; x < (X_Max_Slider.Value - s); x = x + s)
                 {
                     //Any point less than max
                     if (this.Depth[x + (y * 320)] <= maxDepth || this.Depth[(x + s) + (y * 320)] <= maxDepth || this.Depth[x + ((y + s) * 320)] <= maxDepth || this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
