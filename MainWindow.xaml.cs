@@ -363,9 +363,9 @@
         {
             double maxDepth = Far_Filter_Slider.Value;
             int i = 0;
-            for (int y = (int) Y_Min_Slider.Value; y < ((int) Y_Max_Slider.Value - s); y = y + s)
+            for (int y = (int) Top_Slider.Value; y < ((int) Bot_Slider.Value - s); y = y + s)
             {
-                for (int x = (int) X_Min_Slider.Value; x < (X_Max_Slider.Value - s); x = x + s)
+                for (int x = (int) Left_Slider.Value; x < ((int) Right_Slider.Value - s); x = x + s)
                 {
                     //Any point less than max
                     if (PointinRange(x,y))
