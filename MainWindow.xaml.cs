@@ -84,20 +84,9 @@
         public int samplespot;
         public int s = 1;
 
-        public int depth1;
-        public int depth2;
-        public int depth3;
-        public int depth4;
-
-        public int p1;
-        public int p2;
-        public int p3;
-        public int p4;
-
-        public int v1;
-        public int v2;
-        public int v3;
-        public int v4;
+        public int[] depths_array = new int[4];
+        Point3D[] points_array = new Point3D[4];
+        Vector3D[] vectors_array = new Vector3D[5];
 
         public byte[] colorPixels;
         public WriteableBitmap colorBitmap;
@@ -303,6 +292,8 @@
             }
         }
 
+
+
         /// <summary>
         /// Event handler for Kinect sensor's DepthFrameReady event
         /// Take in depth data
@@ -315,6 +306,7 @@
             DepthImageFrame imageFrame = e.OpenDepthImageFrame();
             if (imageFrame != null)
             {
+                double maxDepth = Far_Filter_Slider.Value;
                 short[] pixelData = new short[imageFrame.PixelDataLength];
                 imageFrame.CopyPixelDataTo(pixelData);
                 this.greatestDepth = 0;
@@ -327,14 +319,25 @@
                         this.Depth[x + (y * 320)] = ((ushort)pixelData[x + y * 320]) / 100;
                         //this.Depth[x + (y * 320)] = this.Depth[x + (y * 320)] / 10;
 
-                        if ((this.Depth[x + (y * 320)] > this.greatestDepth) && (this.Depth[x + (y * 320)] < 500))
-                        {
-                            this.greatestDepth = (ushort)this.Depth[x + (y * 320)];
-                        }
+
+
 
                     }
                 }
- 
+              for (int i = 641; i < this.Depth.Length - 641; ++i)
+                    {
+
+                        short depthaverage = (Int16)((this.Depth[i - 641] + (2*this.Depth[i - 640]) + this.Depth[i - 639] +
+                                                     (2*this.Depth[i - 1]) + (4*this.Depth[i]) + (2*this.Depth[i + 2]) +
+                                                     this.Depth[i + 639] + (2*this.Depth[i + 640]) + this.Depth[i + 641]) / 16);
+
+                        this.Depth[i]=depthaverage;
+                        if ((this.Depth[i] > this.greatestDepth) && (this.Depth[i] < maxDepth))
+                        {
+                            this.greatestDepth = (ushort)this.Depth[i];
+                        }
+              }
+
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }
         }
@@ -345,85 +348,92 @@
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
+        bool PointinRange(int x, int y)
+        {   
+            double minDepth = Near_Filter_Slider.Value;
+            double maxDepth = Far_Filter_Slider.Value;
+            return ((this.Depth[x + (y * 320)]>= minDepth && this.Depth[x + (y * 320)] <= maxDepth) || 
+                (this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth) || 
+                (this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth) ||
+                (this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth));
+
+        }
+        
         void BuildMesh()
         {
-
-            double minDepth = 10;//Near_Filter_Slider.Value;
-            int maxDepth = 204;//Far_Filter_Slider.Value;
-            
+            double maxDepth = Far_Filter_Slider.Value;
             int i = 0;
             for (int y = (int) Y_Min_Slider.Value; y < ((int) Y_Max_Slider.Value - s); y = y + s)
             {
                 for (int x = (int) X_Min_Slider.Value; x < (X_Max_Slider.Value - s); x = x + s)
                 {
                     //Any point less than max
-                    if (this.Depth[x + (y * 320)] <= maxDepth || this.Depth[(x + s) + (y * 320)] <= maxDepth || this.Depth[x + ((y + s) * 320)] <= maxDepth || this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth)
+                    if (PointinRange(x,y))
                     {
                         if (this.Depth[x + ((y + s) * 320)] >= maxDepth)
                         {
-                            depth1 = -this.greatestDepth;
+                            depths_array[0] = -this.greatestDepth;
                         }
                         else
                         {
-                            depth1 = -this.Depth[x + ((y + s) * 320)];
+                            depths_array[0] = -this.Depth[x + ((y + s) * 320)];
                         }
 
                         if (this.Depth[x + (y * 320)] >= maxDepth)
                         {
-                            depth2 = -this.greatestDepth;
+                            depths_array[1] = -this.greatestDepth;
                         }
                         else
                         {
-                            depth2 = -this.Depth[x + (y * 320)];
+                            depths_array[1] = -this.Depth[x + (y * 320)];
                         }
 
                         if (this.Depth[(x + s) + (y * 320)] >= maxDepth)
                         {
-                            depth3 = -this.greatestDepth;
+                            depths_array[2] = -this.greatestDepth;
                         }
                         else
                         {
-                            depth3 = -this.Depth[(x + s) + (y * 320)];
+                            depths_array[2] = -this.Depth[(x + s) + (y * 320)];
                         }
 
                         if (this.Depth[(x + s) + ((y + s) * 320)] >= maxDepth)
                         {
-                            depth4 = -this.greatestDepth;
+                            depths_array[3] = -this.greatestDepth;
                         }
                         else
                         {
-                            depth4 = -this.Depth[(x + s) + ((y + s) * 320)];
+                            depths_array[3] = -this.Depth[(x + s) + ((y + s) * 320)];
                         }
+                            points_array[0]=new Point3D(x, (y + s), depths_array[0]);
+                            points_array[1] = new Point3D(x, y, depths_array[1]);
+                            points_array[2] = new Point3D((x + s), y, depths_array[2]);
+                            points_array[3] = new Point3D((x + s), (y + s), depths_array[3]);
 
-                            Point3D p1 = new Point3D(x, (y + s), depth1);
-                            Point3D p2 = new Point3D(x, y, depth2);
-                            Point3D p3 = new Point3D((x + s), y, depth3);
-                            Point3D p4 = new Point3D((x + s), (y + s), depth4);
+                            vectors_array[0] = new Vector3D(points_array[1].X - points_array[0].X, points_array[1].Y - points_array[0].Y, points_array[1].Z - points_array[0].Z);
+                            vectors_array[1] = new Vector3D(points_array[1].X - points_array[2].X, points_array[1].Y - points_array[2].Y, points_array[1].Z - points_array[2].Z);
+                            vectors_array[2] = new Vector3D(points_array[2].X - points_array[0].X, points_array[2].Y - points_array[0].Y, points_array[2].Z - points_array[0].Z);
+                            vectors_array[3] = new Vector3D(points_array[3].X - points_array[0].X, points_array[3].Y - points_array[0].Y, points_array[3].Z - points_array[0].Z);
+                            vectors_array[4] = new Vector3D(points_array[2].X - points_array[3].X, points_array[2].Y - points_array[3].Y, points_array[2].Z - points_array[3].Z);
 
-                            Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
-                            Vector3D v2 = new Vector3D(p2.X - p3.X, p2.Y - p3.Y, p2.Z - p3.Z);
-                            Vector3D v3 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
-                            Vector3D v4 = new Vector3D(p4.X - p1.X, p4.Y - p1.Y, p4.Z - p1.Z);
-                            Vector3D v5 = new Vector3D(p3.X - p4.X, p3.Y - p4.Y, p3.Z - p4.Z);
-
-                            corners.Add(p1);
-                            corners.Add(p2);
-                            corners.Add(p3);
-                            corners.Add(p3);
-                            corners.Add(p4);
-                            corners.Add(p1);
+                            corners.Add(points_array[0]);
+                            corners.Add(points_array[1]);
+                            corners.Add(points_array[2]);
+                            corners.Add(points_array[2]);
+                            corners.Add(points_array[3]);
+                            corners.Add(points_array[0]);
                             Triangles.Add(i);
                             Triangles.Add(i + 1);
                             Triangles.Add(i + 2);
                             Triangles.Add(i + 3);
                             Triangles.Add(i + 4);
                             Triangles.Add(i + 5);
-                            Normals.Add(Vector3D.CrossProduct(v1, v3));
-                            Normals.Add(Vector3D.CrossProduct(v1, v2));
-                            Normals.Add(Vector3D.CrossProduct(v2, v3));
-                            Normals.Add(Vector3D.CrossProduct(v2, v3));
-                            Normals.Add(Vector3D.CrossProduct(v4, v5));
-                            Normals.Add(Vector3D.CrossProduct(v1, v3));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[1]));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[3], vectors_array[4]));
+                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
                             i = i + 6;
                     }
 
