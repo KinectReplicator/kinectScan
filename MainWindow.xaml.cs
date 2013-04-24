@@ -314,29 +314,36 @@
                 {
                     for (int x = 0; x < 320; x++)
                     {
-                       // this.Depth[x + (y * 320)] = ((ushort)((pixelData[x + y * 320]) >> DepthImageFrame.PlayerIndexBitmaskWidth) / 100);
+                        // this.Depth[x + (y * 320)] = ((ushort)((pixelData[x + y * 320]) >> DepthImageFrame.PlayerIndexBitmaskWidth) / 100);
                         //this.Depth[x + (y * 320)] = (this.Depth[x + (y * 320)] < minDepth) || (this.Depth[x + (y * 320)] > maxDepth) ? maxDepth : this.Depth[x + (y * 320)];
                         this.Depth[x + (y * 320)] = ((ushort)pixelData[x + y * 320]) / 100;
                         //this.Depth[x + (y * 320)] = this.Depth[x + (y * 320)] / 10;
 
-
+                        if ((this.Depth[x + y * 320] > this.greatestDepth) && (this.Depth[x + y * 320] < maxDepth))
+                        {
+                            this.greatestDepth = (ushort)this.Depth[x + y * 320];
+                        }
 
 
                     }
                 }
-              for (int i = 641; i < this.Depth.Length - 641; ++i)
+                // Blur Filter
+                if (Filter_Blur.IsChecked == true)
+                {
+                    for (int i = 641; i < this.Depth.Length - 641; ++i)
                     {
 
-                        short depthaverage = (Int16)((this.Depth[i - 641] + (2*this.Depth[i - 640]) + this.Depth[i - 639] +
-                                                     (2*this.Depth[i - 1]) + (4*this.Depth[i]) + (2*this.Depth[i + 2]) +
-                                                     this.Depth[i + 639] + (2*this.Depth[i + 640]) + this.Depth[i + 641]) / 16);
+                        short depthaverage = (Int16)((this.Depth[i - 641] + (2 * this.Depth[i - 640]) + this.Depth[i - 639] +
+                                                     (2 * this.Depth[i - 1]) + (4 * this.Depth[i]) + (2 * this.Depth[i + 2]) +
+                                                     this.Depth[i + 639] + (2 * this.Depth[i + 640]) + this.Depth[i + 641]) / 16);
 
-                        this.Depth[i]=depthaverage;
+                        this.Depth[i] = depthaverage;
                         if ((this.Depth[i] > this.greatestDepth) && (this.Depth[i] < maxDepth))
                         {
                             this.greatestDepth = (ushort)this.Depth[i];
                         }
-              }
+                    }
+                }
 
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }

@@ -86,7 +86,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="90" />
                 <RowDefinition Height="240" />
-                <RowDefinition Height="30" />
+                <RowDefinition Height="50" />
                 <RowDefinition />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="100" />
@@ -124,29 +124,28 @@
                 <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="654" Value="300"/>
                 <Label x:Name="Far_Filter_Value" Content="{Binding ElementName=Far_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <Label x:Name="Left_Title" Content="Left Bound" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                <Label x:Name="Left_Title" Content="LEFT BOUND" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                 <Slider x:Name="Left_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" Minimum="0" Maximum="320" Value="0"/>
                 <Label x:Name="Left_Value" Content="{Binding ElementName=Left_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <Label x:Name="Right_Title" Content="Right Bound" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
+                <Label x:Name="Right_Title" Content="RIGHT BOUND" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
                 <Slider x:Name="Right_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="3" Grid.Column="0" Minimum="0" Maximum="320" Value="320"/>
                 <Label x:Name="Right_Value" Content="{Binding ElementName=Right_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="3" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <Label x:Name="Top_Title" Content="Top Bound" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0" />
+                <Label x:Name="Top_Title" Content="TOP BOUND" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0" />
                 <Slider x:Name="Top_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="4" Grid.Column="0" Minimum="0" Maximum="240" Value="0"/>
                 <Label x:Name="Top_Value" Content="{Binding ElementName=Top_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="4" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <Label x:Name="Bot_Title" Content="Bottom Bound" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0" />
+                <Label x:Name="Bot_Title" Content="BOTTOM BOUND" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0" />
                 <Slider x:Name="Bot_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="5" Grid.Column="0" Minimum="0" Maximum="240" Value="240"/>
                 <Label x:Name="Bot_Value" Content="{Binding ElementName=Bot_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="5" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
             </Grid>
             <!--EndSliderArea-->
 
             <!--Begin Radio-->
-            <RadioButton Name="Filter_Off" Content="Off" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="20" IsChecked="True" /><!--Style="{StaticResource KinectSettingsPanel}" />-->
-            <RadioButton Name="Filter_Bilateral" Content="Bilateral" HorizontalAlignment="Center" Margin="0,0,60,0" Grid.Row="2" VerticalAlignment="Center" Height="20" />
-            <!--Style="{StaticResource KinectSettingsPanel}" />-->
-            <RadioButton Name="Filter_Gaussian" Content="Gaussian" HorizontalAlignment="Right" Margin="0,0,30,0" Grid.Row="2" VerticalAlignment="Center" Height="20" /><!--Style="{StaticResource KinectSettingsPanel} />"-->
+            <Label x:Name="Filter_Type_Title" Content="FILTER TYPE" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" />
+            <RadioButton Name="Filter_Off" Content="Off" HorizontalAlignment="Left" Margin="10,30,0,0" Grid.Row="2" VerticalAlignment="Top" IsChecked="True" />
+            <RadioButton Name="Filter_Blur" Content="Blur" HorizontalAlignment="Left" Margin="60,30,0,0" Grid.Row="2" VerticalAlignment="Top" />
             <!--End Radio-->
             
             <!--ModelNameArea-->
