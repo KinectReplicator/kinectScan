@@ -43,7 +43,7 @@
             <!-- Depth Camera -->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="30,30,350,0" />
             <Image Name="KinectDepthView" Grid.Row="0" Height="240" Width="320" Margin="30,30,350, 0"/>
-            
+
             <!-- Bilateral Camera-->
             <Rectangle Fill="{StaticResource MediumNeutralBrush}" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0" />
             <Image Name="KinectRGBView" Grid.Row="0" Height="240" Width="320" Margin="350,30,30,0"/>
@@ -57,6 +57,7 @@
             <Label x:Name="RGB_Title" Content="RGB CAMERA"  Grid.Row="1" Foreground="White" HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Top"/>
             <Label x:Name="Model_Title" Content="RECONSTRUCTED MODEL" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom"/>
             <Label x:Name="statusBarText" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Grid.RowSpan="2"/>
+            <Label x:Name="KinectStatusText" Content="Kinect Status: Loading..."  Grid.Row="3" Foreground="White" HorizontalAlignment="Left" Margin="10,484,0,0" VerticalAlignment="Top"/>
 
         </Grid>
         <!--CameraZone-->
@@ -75,24 +76,25 @@
                 <ColumnDefinition Width="290" />
             </Grid.ColumnDefinitions>
 
-            <Button x:Name ="Begin_Scan" Content="BEGIN SCAN" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="Begin_Scan_Click"/>
-            <Button x:Name ="End_Scan" Content="END SCAN" Margin="154,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="End_Scan_Click" />
+            <Button x:Name ="Begin_Scan" Content="RECORD FRAME" Margin="0,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="Begin_Scan_Click"/>
+            <Button x:Name ="End_Scan" Content="CLEAR CANVAS" Margin="137,30,0,0" Style="{StaticResource KinectButton}" Grid.Row="0" Click="End_Scan_Click" />
 
             <!--ModelNameArea-->
             <Grid x:Name="ModelNameArea" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="Name_Label" Content="MODEL NAME:" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="0,-3,0,0" />
-                <TextBox x:Name="Model_Name" Text="model.obj"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"  Margin="10,0,0,0" Grid.Column="1" />
-            </Grid><!--EndModelNameArea-->
+                <Label x:Name="Name_Label" Content="MODEL NAME:" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="7,649,0,-645" />
+                <TextBox x:Name="Model_Name" Text="model.obj"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"  Margin="17,652,0,-644" Grid.Column="1" />
+            </Grid>
+            <!--EndModelNameArea-->
 
-            <Grid x:Name="SliderArea" Background="White" Grid.Row="2" Margin="0,0,30,0">
+            <Grid x:Name="SliderArea" Background="White" Grid.Row="1" Margin="0,0,30,30" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                     <RowDefinition Height="40" />
@@ -109,19 +111,19 @@
                 </Grid.ColumnDefinitions>
 
                 <Label x:Name="Near_Filter_Title" Content="MIN FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
-                <Slider x:Name="Near_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" Minimum="100" Maximum="8000"/>
-                <Label x:Name="Near_Filter_Value" Content="{Binding ElementName=Near_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Slider x:Name="Near_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="0" Grid.Column="0" Minimum="0" Maximum="654" Value="0"/>
+                <Label x:Name="Near_Filter_Value" Content="{Binding ElementName=Near_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="0" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="Far_Filter_Title" Content="MAX FILTER DEPTH" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="7000" Value="2500"/>
-                <Label x:Name="Far_Filter_Value" Content="{Binding ElementName=Far_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N2}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Slider x:Name="Far_Filter_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="1" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="654" Value="300"/>
+                <Label x:Name="Far_Filter_Value" Content="{Binding ElementName=Far_Filter_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="1" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="X_Min_Title" Content="X Min" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                 <Slider x:Name="X_Min_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="2" Grid.Column="0" Minimum="0" Maximum="320" Value="0"/>
                 <Label x:Name="X_Min_Value" Content="{Binding ElementName=X_Min_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="X_Max_Title" Content="X Max" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
-                <Slider x:Name="X_Max_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="3" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="320" Value="320"/>
+                <Slider x:Name="X_Max_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="3" Grid.Column="0" Minimum="{Binding ElementName=X_Min_Slider,Path=Value}" Maximum="320" Value="320"/>
                 <Label x:Name="X_Max_Value" Content="{Binding ElementName=X_Max_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="3" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="Y_Min_Title" Content="Y Min" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0" />
@@ -129,21 +131,19 @@
                 <Label x:Name="Y_Min_Value" Content="{Binding ElementName=Y_Min_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="4" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <Label x:Name="Y_Max_Title" Content="Y Max" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0" />
-                <Slider x:Name="Y_Max_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="5" Grid.Column="0" Minimum="{Binding ElementName=Near_Filter_Slider,Path=Value}" Maximum="240" Value="240"/>
+                <Slider x:Name="Y_Max_Slider" HorizontalAlignment="Left"  Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Style="{StaticResource SliderStyle}" Grid.Row="5" Grid.Column="0" Minimum="{Binding ElementName=Y_Min_Slider,Path=Value}" Maximum="240" Value="240"/>
                 <Label x:Name="Y_Max_Value" Content="{Binding ElementName=Y_Max_Slider,Path=Value}" ContentStringFormat="{}{0:N0}" Grid.Row="5" Grid.Column="1" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" />
             </Grid>
             <!--SliderArea-->
 
-            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="30,0,0,30" Style="{StaticResource KinectButton}" Grid.Row="5" Click="Export_Model_Click">
+            <Button x:Name ="Export_Model"  VerticalAlignment="Bottom" Margin="50,0,0,23" Style="{StaticResource KinectButton}" Grid.Row="4" Click="Export_Model_Click">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="Export_Label" Content="EXPORT MODEL" Foreground="White" FontFamily="{StaticResource KinectFont}" FontSize="14" Padding="0,0,10,0"/>
                     <Image x:Name="Download" Source="Images/download.png"  Width="23" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
             </Button>
-            <TextBox HorizontalAlignment="Left" Name="statusBarTextBlock" Height="23" Margin="30,15,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
             <!-- <TextBox Name="test_text" HorizontalAlignment="Left" Height="109" Margin="42,124,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="209"/> -->
         </Grid>
-        <Button Content="CAPTURE MODEL" Name="test" Grid.Column="2" HorizontalAlignment="Left" Margin="30,0,0,100" VerticalAlignment="Bottom" Style="{StaticResource KinectButton}" Click="test_Click"/>
         <!--MenuArea-->
         <tk:KinectSensorChooserUI Name="sensorChooserUI" HorizontalAlignment="Center" Margin="330,0,330,5"/>
     </Grid>

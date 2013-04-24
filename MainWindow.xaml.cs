@@ -199,7 +199,7 @@
                 if (null == this.sensor)
                 {
                     // Show "No ready Kinect found!" on status bar
-                    this.statusBarTextBlock.Text = Properties.Resources.NoReadyKinect;
+                    this.KinectStatusText.Content = Properties.Resources.NoReadyKinect;
                 }
                 else
                 {
@@ -207,7 +207,7 @@
                     double intervalSeconds = (DateTime.Now - this.lastFPSTimestamp).TotalSeconds;
 
                     // Calculate and show fps on status bar
-                    this.statusBarTextBlock.Text = string.Format(
+                    this.KinectStatusText.Content = string.Format(
                         System.Globalization.CultureInfo.InvariantCulture,
                         Properties.Resources.Fps,
                         (double)this.processedFrameCount / intervalSeconds);
@@ -492,11 +492,7 @@
             Canvas.SetLeft(this.myViewport, 0);
             
         }
-        private void test_Click(object sender, RoutedEventArgs e)
-        {
-            return;
-        }
-
+       
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {            
             string fileName = "model.obj";
@@ -526,8 +522,8 @@
         {
             this.Dispatcher.BeginInvoke((Action)(() =>
             {
-                //this.ResetFps();
-                this.statusBarTextBlock.Text = message;
+                this.ResetFps();
+                this.KinectStatusText.Content = message;
             }));
         }
 
