@@ -65,9 +65,7 @@
                 <Canvas Name="KinectNormalView" Grid.Column="1" Height="480" Width="640" Margin="0,0,0,30" Background="{StaticResource MediumNeutralBrush}"/>
                 
                 <!-- Bounding Box-->
-                <Border BorderBrush="Red" BorderThickness="1" Grid.Column="1" >
-                     
-                </Border>
+                <!-- <Border BorderBrush="Red" BorderThickness="1" Grid.Column="1" /> -->
 
             </Grid>
 
@@ -159,7 +157,7 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label x:Name="Name_Label" Content="MODEL NAME:" Foreground="{StaticResource SecondaryBrandBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="7,0,0,0" />
-                <TextBox x:Name="Model_Name" Text="model.obj"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"  Margin="17,0,0,0" Grid.Column="1" />
+                <TextBox x:Name="Model_Name" Text="modelName"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"  Margin="17,0,0,0" Grid.Column="1" />
             </Grid>
             <!--EndModelNameArea-->
 

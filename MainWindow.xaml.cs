@@ -513,7 +513,7 @@
 
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
-            string fileName = "model.obj";
+            string fileName = Model_Name.Text + ".obj";
 
             using (var exporter = new ObjExporter(fileName))
             {
