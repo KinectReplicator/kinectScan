@@ -24,7 +24,7 @@
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         /// <summary>
         /// Timestamp of last depth frame in milliseconds
         /// </summary>
@@ -59,7 +59,7 @@
         /// Kinect sensor chooser object
         /// </summary>
         private KinectSensorChooser sensorChooser;
-      
+
         /// <summary>
         /// Format of depth image to use
         /// </summary>
@@ -113,6 +113,7 @@
             // Set last fps timestamp as now
             this.lastFPSTimestamp = DateTime.Now;
         }
+
         /// <summary>
         /// Execute shutdown tasks
         /// </summary>
@@ -176,7 +177,6 @@
             }
         }
 
-
         /// <summary>
         /// Handler for FPS timer tick
         /// </summary>
@@ -184,24 +184,23 @@
         /// <param name="e">Event arguments</param>
         private void FpsTimerTick(object sender, EventArgs e)
         {
-          
-                if (null == this.sensor)
-                {
-                    // Show "No ready Kinect found!" on status bar
-                    this.KinectStatusText.Content = Properties.Resources.NoReadyKinect;
-                }
-                else
-                {
-                    // Calculate time span from last calculation of FPS
-                    double intervalSeconds = (DateTime.Now - this.lastFPSTimestamp).TotalSeconds;
 
-                    // Calculate and show fps on status bar
-                    this.KinectStatusText.Content = string.Format(
-                        System.Globalization.CultureInfo.InvariantCulture,
-                        Properties.Resources.Fps,
-                        (double)this.processedFrameCount / intervalSeconds);
-                }
-          
+            if (null == this.sensor)
+            {
+                // Show "No ready Kinect found!" on status bar
+                this.KinectStatusText.Content = Properties.Resources.NoReadyKinect;
+            }
+            else
+            {
+                // Calculate time span from last calculation of FPS
+                double intervalSeconds = (DateTime.Now - this.lastFPSTimestamp).TotalSeconds;
+
+                // Calculate and show fps on status bar
+                this.KinectStatusText.Content = string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    Properties.Resources.Fps,
+                    (double)this.processedFrameCount / intervalSeconds);
+            }
 
             // Reset frame counter
             this.processedFrameCount = 0;
@@ -256,15 +255,14 @@
 
                 return;
             }
-            
+
             // Allocate space to put the pixels we'll receive
             this.colorPixels = new byte[this.sensor.ColorStream.FramePixelDataLength];
 
             //// This is the bitmap we'll display on-screen
             this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
-         }
+        }
 
-       
         /// <summary>
         /// Event handler for Kinect sensor's ColorFrameReady event
         /// </summary>
@@ -291,8 +289,6 @@
 
             }
         }
-
-
 
         /// <summary>
         /// Event handler for Kinect sensor's DepthFrameReady event
@@ -355,27 +351,27 @@
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        bool PointinRange(int x, int y)
-        {   
+        private bool PointinRange(int x, int y)
+        {
             double minDepth = Near_Filter_Slider.Value;
             double maxDepth = Far_Filter_Slider.Value;
-            return ((this.Depth[x + (y * 320)]>= minDepth && this.Depth[x + (y * 320)] <= maxDepth) || 
-                (this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth) || 
+            return ((this.Depth[x + (y * 320)] >= minDepth && this.Depth[x + (y * 320)] <= maxDepth) ||
+                (this.Depth[(x + s) + (y * 320)] >= minDepth && this.Depth[(x + s) + (y * 320)] <= maxDepth) ||
                 (this.Depth[x + ((y + s) * 320)] >= minDepth && this.Depth[x + ((y + s) * 320)] <= maxDepth) ||
                 (this.Depth[(x + s) + ((y + s) * 320)] >= minDepth && this.Depth[(x + s) + ((y + s) * 320)] <= maxDepth));
 
         }
-        
+
         void BuildMesh()
         {
             double maxDepth = Far_Filter_Slider.Value;
             int i = 0;
-            for (int y = (int) Top_Slider.Value; y < ((int) Bot_Slider.Value - s); y = y + s)
+            for (int y = (int)Top_Slider.Value; y < ((int)Bot_Slider.Value - s); y = y + s)
             {
-                for (int x = (int) Left_Slider.Value; x < ((int) Right_Slider.Value - s); x = x + s)
+                for (int x = (int)Left_Slider.Value; x < ((int)Right_Slider.Value - s); x = x + s)
                 {
                     //Any point less than max
-                    if (PointinRange(x,y))
+                    if (PointinRange(x, y))
                     {
                         if (this.Depth[x + ((y + s) * 320)] >= maxDepth)
                         {
@@ -412,48 +408,53 @@
                         {
                             depths_array[3] = -this.Depth[(x + s) + ((y + s) * 320)];
                         }
-                            points_array[0]=new Point3D(x, (y + s), depths_array[0]);
-                            points_array[1] = new Point3D(x, y, depths_array[1]);
-                            points_array[2] = new Point3D((x + s), y, depths_array[2]);
-                            points_array[3] = new Point3D((x + s), (y + s), depths_array[3]);
 
-                            vectors_array[0] = new Vector3D(points_array[1].X - points_array[0].X, points_array[1].Y - points_array[0].Y, points_array[1].Z - points_array[0].Z);
-                            vectors_array[1] = new Vector3D(points_array[1].X - points_array[2].X, points_array[1].Y - points_array[2].Y, points_array[1].Z - points_array[2].Z);
-                            vectors_array[2] = new Vector3D(points_array[2].X - points_array[0].X, points_array[2].Y - points_array[0].Y, points_array[2].Z - points_array[0].Z);
-                            vectors_array[3] = new Vector3D(points_array[3].X - points_array[0].X, points_array[3].Y - points_array[0].Y, points_array[3].Z - points_array[0].Z);
-                            vectors_array[4] = new Vector3D(points_array[2].X - points_array[3].X, points_array[2].Y - points_array[3].Y, points_array[2].Z - points_array[3].Z);
+                        points_array[0] = new Point3D(x, (y + s), depths_array[0]);
+                        points_array[1] = new Point3D(x, y, depths_array[1]);
+                        points_array[2] = new Point3D((x + s), y, depths_array[2]);
+                        points_array[3] = new Point3D((x + s), (y + s), depths_array[3]);
 
-                            corners.Add(points_array[0]);
-                            corners.Add(points_array[1]);
-                            corners.Add(points_array[2]);
-                            corners.Add(points_array[2]);
-                            corners.Add(points_array[3]);
-                            corners.Add(points_array[0]);
-                            Triangles.Add(i);
-                            Triangles.Add(i + 1);
-                            Triangles.Add(i + 2);
-                            Triangles.Add(i + 3);
-                            Triangles.Add(i + 4);
-                            Triangles.Add(i + 5);
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[1]));
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[3], vectors_array[4]));
-                            Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
-                            i = i + 6;
+                        vectors_array[0] = new Vector3D(points_array[1].X - points_array[0].X, points_array[1].Y - points_array[0].Y, points_array[1].Z - points_array[0].Z);
+                        vectors_array[1] = new Vector3D(points_array[1].X - points_array[2].X, points_array[1].Y - points_array[2].Y, points_array[1].Z - points_array[2].Z);
+                        vectors_array[2] = new Vector3D(points_array[2].X - points_array[0].X, points_array[2].Y - points_array[0].Y, points_array[2].Z - points_array[0].Z);
+                        vectors_array[3] = new Vector3D(points_array[3].X - points_array[0].X, points_array[3].Y - points_array[0].Y, points_array[3].Z - points_array[0].Z);
+                        vectors_array[4] = new Vector3D(points_array[2].X - points_array[3].X, points_array[2].Y - points_array[3].Y, points_array[2].Z - points_array[3].Z);
+
+                        corners.Add(points_array[0]);
+                        corners.Add(points_array[1]);
+                        corners.Add(points_array[2]);
+                        corners.Add(points_array[2]);
+                        corners.Add(points_array[3]);
+                        corners.Add(points_array[0]);
+
+                        Triangles.Add(i);
+                        Triangles.Add(i + 1);
+                        Triangles.Add(i + 2);
+                        Triangles.Add(i + 3);
+                        Triangles.Add(i + 4);
+                        Triangles.Add(i + 5);
+
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[1]));
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[3], vectors_array[4]));
+                        Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
+
+                        i = i + 6;
                     }
 
                 }
             }
+
             int numcorners = corners.Count;
-            for (int p=0; p<numcorners; p++)
+            for (int p = 0; p < numcorners; p++)
             {
-                Point3D cornertocopy= corners[p];
-                corners.Add(new Point3D(cornertocopy.X,cornertocopy.Y,-this.greatestDepth));
-                Triangles.Add(i); 
-                Normals.Add(new Vector3D(0,0,1));
-                i=i+1;
+                Point3D cornertocopy = corners[p];
+                corners.Add(new Point3D(cornertocopy.X, cornertocopy.Y, -this.greatestDepth));
+                Triangles.Add(i);
+                Normals.Add(new Vector3D(0, 0, 1));
+                i = i + 1;
             }
 
 
@@ -507,13 +508,13 @@
             this.myViewport.Width = KinectNormalView.Width;
             Canvas.SetTop(this.myViewport, 0);
             Canvas.SetLeft(this.myViewport, 0);
-            
+
         }
-       
+
         private void Export_Model_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             string fileName = "model.obj";
-            
+
             using (var exporter = new ObjExporter(fileName))
             {
                 exporter.Export(this.modelGroup);
@@ -556,9 +557,10 @@
             tmesh.TextureCoordinates.Clear();
 
         }
+
         private void End_Scan_Click(object sender, RoutedEventArgs e)
         {
-            this.ClearMesh();          
+            this.ClearMesh();
         }
     }
 }
