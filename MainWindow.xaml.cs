@@ -70,24 +70,55 @@
         /// </summary>
         private const ColorImageFormat cFormat = ColorImageFormat.InfraredResolution640x480Fps30;
 
+        // stores furthest depth in the scene
         public ushort greatestDepth = 0;
+
+        // array for all of the depth data
         private int[] Depth = new int[320 * 240];
+
+        // stores all of the 3D trianlges with normals and points
         Model3DGroup modelGroup = new Model3DGroup();
+
+        // material placed over the mesh for viewing
         public GeometryModel3D msheet = new GeometryModel3D();
+
+        // collection of corners for the triangles
         public Point3DCollection corners = new Point3DCollection();
+
+        // collection of all the triangles
         public Int32Collection Triangles = new Int32Collection();
+
+        
         public MeshGeometry3D tmesh = new MeshGeometry3D();
+
+        // collection of all the cross product normals
         public Vector3DCollection Normals = new Vector3DCollection();
+
+        // add texture to the mesh
         public PointCollection myTextureCoordinatesCollection = new PointCollection();
+
+        // storage for camera, scene, etc...
         public ModelVisual3D modelsVisual = new ModelVisual3D();
+
+       
         public Viewport3D myViewport = new Viewport3D();
+
+        // test variable
         public int samplespot;
+
+        // variable for changing the quality 1 is the best 16 contains almost no data
         public int s = 1;
 
+        // depth point collection
         public int[] depths_array = new int[4];
+
+        // collection of points
         Point3D[] points_array = new Point3D[4];
+
+        // collection of vectors
         Vector3D[] vectors_array = new Vector3D[5];
 
+        //used for displaying RGB camera
         public byte[] colorPixels;
         public WriteableBitmap colorBitmap;
 
@@ -141,10 +172,16 @@
                 this.sensor.DepthFrameReady -= this.SensorDepthFrameReady;
                 this.sensor.ColorFrameReady -= this.SensorColorFrameReady;
             }
-
+            
+            // Empty the canvas
             this.ClearMesh();
         }
 
+        /// <summary>
+        /// Handles adding a new kinect
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments for the newly connected Kinect</param>
         private void OnKinectSensorChanged(object sender, KinectChangedEventArgs e)
         {
             // Check new sensor's status
@@ -169,7 +206,8 @@
             }
 
             if (null == this.sensor)
-            {
+            {   
+                // if no kinect clear the text on screen
                 this.statusBarText.Content = Properties.Resources.NoKinectReady;
                 this.IR_Title.Content = "";
                 this.Model_Title.Content = "";
@@ -284,7 +322,8 @@
                         this.colorBitmap.PixelWidth * colorFrame.BytesPerPixel,
                         0);
                 }
-
+                
+                // set the RGB image to the RGB camera
                 this.KinectRGBView.Source = this.colorBitmap;
 
             }
@@ -310,11 +349,10 @@
                 {
                     for (int x = 0; x < 320; x++)
                     {
-                        // this.Depth[x + (y * 320)] = ((ushort)((pixelData[x + y * 320]) >> DepthImageFrame.PlayerIndexBitmaskWidth) / 100);
-                        //this.Depth[x + (y * 320)] = (this.Depth[x + (y * 320)] < minDepth) || (this.Depth[x + (y * 320)] > maxDepth) ? maxDepth : this.Depth[x + (y * 320)];
+                        // scale depth down
                         this.Depth[x + (y * 320)] = ((ushort)pixelData[x + y * 320]) / 100;
-                        //this.Depth[x + (y * 320)] = this.Depth[x + (y * 320)] / 10;
 
+                        // finds the furthest depth from all the depth pixels
                         if ((this.Depth[x + y * 320] > this.greatestDepth) && (this.Depth[x + y * 320] < maxDepth))
                         {
                             this.greatestDepth = (ushort)this.Depth[x + y * 320];
@@ -323,7 +361,7 @@
 
                     }
                 }
-                // Blur Filter
+                // Blur Filter  -- Guassian
                 if (Filter_Blur.IsChecked == true)
                 {
                     for (int i = 641; i < this.Depth.Length - 641; ++i)
@@ -341,16 +379,17 @@
                     }
                 }
 
+                // Set the depth image to the Depth sensor view
                 this.KinectDepthView.Source = DepthToBitmapSource(imageFrame);
             }
         }
 
 
         /// <summary>
-        /// Event handler for building the mesh
+        /// Flag check for a point within the bounding box
         /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="x">location on the x plane</param>
+        /// <param name="y">location on the y plane</param>
         private bool PointinRange(int x, int y)
         {
             double minDepth = Near_Filter_Slider.Value;
@@ -362,6 +401,9 @@
 
         }
 
+        /// <summary>
+        /// Create the mesh
+        /// </summary>
         void BuildMesh()
         {
             double maxDepth = Far_Filter_Slider.Value;
@@ -409,17 +451,20 @@
                             depths_array[3] = -this.Depth[(x + s) + ((y + s) * 320)];
                         }
 
+                        // triangle point locations
                         points_array[0] = new Point3D(x, (y + s), depths_array[0]);
                         points_array[1] = new Point3D(x, y, depths_array[1]);
                         points_array[2] = new Point3D((x + s), y, depths_array[2]);
                         points_array[3] = new Point3D((x + s), (y + s), depths_array[3]);
 
+                        // create vectors of size difference between points
                         vectors_array[0] = new Vector3D(points_array[1].X - points_array[0].X, points_array[1].Y - points_array[0].Y, points_array[1].Z - points_array[0].Z);
                         vectors_array[1] = new Vector3D(points_array[1].X - points_array[2].X, points_array[1].Y - points_array[2].Y, points_array[1].Z - points_array[2].Z);
                         vectors_array[2] = new Vector3D(points_array[2].X - points_array[0].X, points_array[2].Y - points_array[0].Y, points_array[2].Z - points_array[0].Z);
                         vectors_array[3] = new Vector3D(points_array[3].X - points_array[0].X, points_array[3].Y - points_array[0].Y, points_array[3].Z - points_array[0].Z);
                         vectors_array[4] = new Vector3D(points_array[2].X - points_array[3].X, points_array[2].Y - points_array[3].Y, points_array[2].Z - points_array[3].Z);
 
+                        // add the corners to the 2 triangles to form a square
                         corners.Add(points_array[0]);
                         corners.Add(points_array[1]);
                         corners.Add(points_array[2]);
@@ -427,6 +472,7 @@
                         corners.Add(points_array[3]);
                         corners.Add(points_array[0]);
 
+                        // add triangles to the collection
                         Triangles.Add(i);
                         Triangles.Add(i + 1);
                         Triangles.Add(i + 2);
@@ -434,6 +480,7 @@
                         Triangles.Add(i + 4);
                         Triangles.Add(i + 5);
 
+                        // find the normals of the triangles by taking the cross product
                         Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[2]));
                         Normals.Add(Vector3D.CrossProduct(vectors_array[0], vectors_array[1]));
                         Normals.Add(Vector3D.CrossProduct(vectors_array[1], vectors_array[2]));
@@ -447,6 +494,7 @@
                 }
             }
 
+            // add the flat back wall
             int numcorners = corners.Count;
             for (int p = 0; p < numcorners; p++)
             {
@@ -460,6 +508,10 @@
 
         }
 
+        /// <summary>
+        /// Create depth image from depth frame
+        /// </summary>
+        /// <param name="imageFrame">collection of depth data</param>
         BitmapSource DepthToBitmapSource(DepthImageFrame imageFrame)
         {
             short[] pixelData = new short[imageFrame.PixelDataLength];
@@ -475,21 +527,33 @@
             return bmap;
         }
 
+        /// <summary>
+        /// take a photo when button is clicked
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
         private void Begin_Scan_Click(object sender, RoutedEventArgs e)
         {
+            //clear the canvas
             this.ClearMesh();
 
+            // add light to the scene
             DirectionalLight DirLight1 = new DirectionalLight();
             DirLight1.Color = Colors.White;
             DirLight1.Direction = new Vector3D(0, 0, -1);
+
+            // add a camera to the scene
             PerspectiveCamera Camera1 = new PerspectiveCamera();
 
+            // set the location of the camera
             Camera1.Position = new Point3D(160, 120, 480);
             Camera1.LookDirection = new Vector3D(0, 0, -1);
             Camera1.UpDirection = new Vector3D(0, -1, 0);
 
+            // create the mesh from depth data
             this.BuildMesh();
 
+            // add texture to all the points
             tmesh.Positions = corners;
             tmesh.TriangleIndices = Triangles;
             tmesh.Normals = Normals;
@@ -497,6 +561,7 @@
             msheet.Geometry = tmesh;
             msheet.Material = new DiffuseMaterial((SolidColorBrush)(new BrushConverter().ConvertFrom("#52318F")));
 
+            // build the scene and display it
             this.modelGroup.Children.Add(msheet);
             this.modelGroup.Children.Add(DirLight1);
             this.modelsVisual.Content = this.modelGroup;
@@ -511,8 +576,14 @@
 
         }
 
+        /// <summary>
+        /// Export the completed mesh to a .obj file
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
         private void Export_Model_Click(object sender, RoutedEventArgs e)
         {
+            //function from Helix Toolkit
             string fileName = Model_Name.Text + ".obj";
 
             using (var exporter = new ObjExporter(fileName))
@@ -520,6 +591,7 @@
                 exporter.Export(this.modelGroup);
             }
 
+            // test code for seeing depth frame values
             Process.Start("explorer.exe", "/select,\"" + fileName + "\"");
 
             string fileName2 = "depth.txt";
@@ -545,6 +617,9 @@
             }));
         }
 
+        /// <summary>
+        /// clear everything from the scene and canvas
+        /// </summary>
         public void ClearMesh()
         {
             KinectNormalView.Children.Clear();
@@ -558,6 +633,11 @@
 
         }
 
+        /// <summary>
+        /// Clear canvas button click
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
         private void End_Scan_Click(object sender, RoutedEventArgs e)
         {
             this.ClearMesh();
