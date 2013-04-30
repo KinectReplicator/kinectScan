@@ -1,4 +1,4 @@
-### Welcome to KinectScane.
+### Welcome to KinectScan.
 This was created to serve as an electronic archive to the work performed during the Spring semester of 2013 for the Rutgers University Electrical & Computer Engineering Senior Capstone Design. 
 
 ### Project Abstract
