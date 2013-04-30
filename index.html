@@ -39,32 +39,45 @@
         <ul></ul>
       </nav>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <h3>Welcome to our Project Archive.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>This webpage was created to serve as an electronic archive to the work performed during the Spring semester of 2013 for the Rutgers University Electrical &amp; Computer Engineering Senior Capstone Design. </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<h3>Project Abstract</h3>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>The Microsoft Kinect for Windows has proven to be a valuable tool in the field of computer vision. The Kinect is comprised of an infrared laser projector and depth sensor. The depth data of a scene is run through a bilateral filter and vector mathematics is used to define the coordinates, connecting lines, the vertices, and edges to form a three-dimensional mesh. The software displays the raw depth data and infrared camera image, this allows the user to filter out objects closer or further than a specified depth, and exports the reconstructed three-dimensional mesh. That mesh is then sliced into horizontal layers and converted into G-Code, a machine language that maneuvers the three-dimensional printer where to extrude the ABS plastic to create a physical replica of the reconstructed object. </p>
 
-<h3>Designer Templates</h3>
+<h3>Final Report and Summary Video</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>The final submitted report can be found here: <a href="https://github.com/KinectReplicator/Documentation/raw/master/FinalReport.pdf">KinectScan Final Report</a></p>
 
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>A one minute YouTube video that displays how the project works can be found here: <a href="http://www.youtube.com/watch?v=5dCNUGW-1Hg">YouTube Video</a></p>
 
 <h3>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>This project was design, created, and implemented in over 300 hours of work by: Ryan Cullinane (<a href="https://github.com/covertPZ" class="user-mention">@covertPZ</a>), Cady Motyka (<a href="https://github.com/cmotyka" class="user-mention">@cmotyka</a>), and Elie Rosen (<a href="https://github.com/erosen" class="user-mention">@erosen</a>). All of which completed their undergraduate degree from the Rutgers Electrical &amp; Computer Engineering Program in May of 2013. </p>
 
-<h3>Support or Contact</h3>
+<h3>Try our Code</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>To run the program:
+1. connect a Microsoft Kinect Device to your personal computer. 
+2. Download the project from the links at the top. 
+3. Navigate to the "Release" folder. 
+4. Run the application "KinectScan.exe".</p>
+
+<h3>KinectScan Instructions</h3>
+
+<p>To create a 3-D mesh of the current scene press the "Record Frame" button. To clear a mesh, you may either take another capture or press the "Clear Canvas" button. The sliders may be used to configure how far the Kinect should look back and to create a bounding box to crop a scene. This must be performed before recording a frame. When a desired mesh is captured, fill in the model name box and press "Export Model". The model will export which can then be opened in 3-D software such as <a href="http://meshlab.sourceforge.net/">MeshLab</a>. </p>
+
+<h3>3-D Print a Mesh</h3>
+
+<p>To print the mesh it must first be ran through <a href="http://cloud.netfabb.com/">Netfabb</a> to correctly fill in the volume, the output from this web-based application will make sure that the 3-D scan is oriented correctly and manifold. </p>
+
+<p>Run the new object through a 3-D printer G-code compiler such as <a href="http://slic3r.org/">Slic3r</a> or <a href="http://www.makerbot.com/makerware/">MakerWare</a> which will allow for the mesh to be printed on a 3-D printer.</p>
+
+<h3>Enjoy!</h3>
+
+<p>Photos from our semester long project can be found here: <a href="http://sdrv.ms/13elU5N">SkyDrive Gallery</a></p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/KinectReplicator">KinectReplicator</a></p>
@@ -72,6 +85,16 @@ $ git checkout gh-pages
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-40556645-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
